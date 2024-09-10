@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class AppointmentResponceDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointment_id;
 
-    private String file;
+    private MultipartFile fileName;
 
     private Date appointment_date;
 
