@@ -57,5 +57,13 @@ public class Appointment {
     @JsonIgnore
     private Patient patients;
 
+//    *************************************************************
+
+    @Column(name = "appointment_image_name")
+    @ElementCollection
+    @CollectionTable(name = "imageName", joinColumns = @JoinColumn(name = "image_name_fk"))
+    @JsonIgnore
+    private List<String> imageNames;
+
 
 }

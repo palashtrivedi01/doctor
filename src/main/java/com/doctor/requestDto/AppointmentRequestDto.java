@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 //@Getter
 //@Setter
@@ -42,5 +43,8 @@ public class AppointmentRequestDto {
 
     private Patient patients;
 
+//    ***********************************************************************
+
+    private List<String> imageNames;
 
 }
