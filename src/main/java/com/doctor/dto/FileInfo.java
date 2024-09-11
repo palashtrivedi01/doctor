@@ -1,4 +1,4 @@
-package com.doctor.dto;
+/*package com.doctor.dto;
 
 import lombok.Data;
 
@@ -13,4 +13,4 @@ public class FileInfo {
     }
 
 
-}
+}*/

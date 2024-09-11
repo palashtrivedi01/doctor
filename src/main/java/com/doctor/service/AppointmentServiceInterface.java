@@ -10,7 +10,7 @@ public interface AppointmentServiceInterface {
 
     public Appointment findByPatientEmail(String email);
 
-    Appointment store(MultipartFile file);
-    public void init();
+   // Appointment store(MultipartFile file);
+  //  public void init();
 
 }

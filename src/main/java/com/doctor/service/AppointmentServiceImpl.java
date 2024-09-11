@@ -37,7 +37,7 @@ public class AppointmentServiceImpl implements AppointmentServiceInterface {
         return ap;
     }
 
-    private final Path root = Paths.get("uploads");
+   /* private final Path root = Paths.get("uploads");
 
     public void init() {
         try {
@@ -61,9 +61,9 @@ public class AppointmentServiceImpl implements AppointmentServiceInterface {
 
             throw new RuntimeException(e.getMessage());
         }
-        return null;
+        return null;*/
     }
 
 
 
-}
+

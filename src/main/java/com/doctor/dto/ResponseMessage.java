@@ -1,4 +1,4 @@
-package com.doctor.dto;
+/*package com.doctor.dto;
 
 public class ResponseMessage {
     private String message;
@@ -15,4 +15,4 @@ public class ResponseMessage {
         this.message = message;
     }
 
-}
+}*/

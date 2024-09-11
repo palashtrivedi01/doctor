@@ -1,4 +1,4 @@
-package com.doctor.dto;
+/*package com.doctor.dto;
 
 import lombok.Data;
 
@@ -28,3 +28,4 @@ public class AppointmentRequestDto {
 
     private List<String> fileNames;
 }
+*/

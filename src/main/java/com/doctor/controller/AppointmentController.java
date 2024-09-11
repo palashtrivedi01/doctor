@@ -1,7 +1,7 @@
 package com.doctor.controller;
 
-import com.doctor.dto.FileInfo;
-import com.doctor.dto.ResponseMessage;
+//import com.doctor.dto.FileInfo;
+//import com.doctor.dto.ResponseMessage;
 import com.doctor.entities.Appointment;
 import com.doctor.service.AppointmentServiceImpl;
 import com.doctor.service.AppointmentServiceInterface;
@@ -19,21 +19,22 @@ public class AppointmentController {
     @Autowired
     private AppointmentServiceInterface appointmentService;
 
-    @PostMapping("/")
+    @PostMapping("/createAppointment")
     public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
         Appointment appointment1 = appointmentService.createAppointment(appointment);
         return ResponseEntity.ok(appointment1);
     }
+
     @GetMapping("/{patientEmail}")
-    public ResponseEntity<Appointment> getPatientByEmail(@PathVariable ("patientEmail") String email) {
-//            ResponseEntity<Appointment> appointment=this.getPatientByEmail(email);
+    public ResponseEntity<Appointment> getPatientByEmail(@PathVariable("patientEmail") String email) {
+
         Appointment appointment1 = this.appointmentService.findByPatientEmail(email);
-//        return appointment1;
+
         return ResponseEntity.ok(appointment1);
     }
+}
 
-
-        @PostMapping("/upload")
+      /*  @PostMapping("/upload")
         public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
             String message = "";
             try {
@@ -49,8 +50,8 @@ public class AppointmentController {
             }
         }
 
+*/
 
 
 
 
-}

@@ -1,8 +1,10 @@
 package com.doctor.entities;
 
 import com.doctor.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,23 +13,25 @@ import java.util.Date;
 @Entity
 public class Doctor {
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long doctor_id;
+    private Long doctorId;
     private Role role;
-    private String doctor_email;
-    private String doctor_gender;
-    private String doctor_mobile_number;
-    private String doctor_name;
-    private String doctor_password;
-    private String doctor_specialization;
-    private String hospital_name;
-    private Date register_date;
+    private String doctorEmail;
+    private String doctorGender;
+    private String doctorMobileNumber;
+    private String doctorName;
+    private String doctorPassword;
+    private String doctorSpecialization;
+    private String hospitalName;
+    private Date registerDate;
 
-    private String reset_password_token;
-    private Date update_date;
+    private String resetPasswordToken;
+    private Date updateDate;
 
     @ManyToOne
+    @JsonIgnore
     private HospitalDetails hospital_id;
 
    /* @ManyToOne

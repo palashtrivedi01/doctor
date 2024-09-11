@@ -1,6 +1,6 @@
 package com.doctor.configuration;
-
-
+//import com.doctor.configuration;
+import  com.doctor.*;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
