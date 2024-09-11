@@ -49,7 +49,7 @@ public class AppointmentRestController {
     * in other scenarios where one key might correspond to multiple values.
      */
 
-    @PostMapping("/saveAppointment")
+    /*@PostMapping("/saveAppointment")
     public ResponseEntity<Appointment> saveAppointment
     (@RequestBody Appointment appointment, @RequestParam("file") MultipartFile file) throws Exception {
         System.out.println("TESTING");
@@ -61,12 +61,12 @@ public class AppointmentRestController {
 
         return new ResponseEntity<Appointment>
                 (this.iAppointmentService.saveAppointment(appointment), HttpStatus.CREATED);
-    }
+    }*/
 
-//    @PostMapping("/saveAppointment")  //This is working properly
-//    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
-//        return new ResponseEntity<>(this.iAppointmentService.saveAppointment(appointment), HttpStatus.CREATED);
-//    }
+    @PostMapping("/saveAppointment")  //This is working properly
+    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
+        return new ResponseEntity<>(this.iAppointmentService.saveAppointment(appointment), HttpStatus.CREATED);
+    }
 
     @GetMapping("/getAppointment/{byPatientEmail}")
     public ResponseEntity<Appointment> getAppointmentByPatientEmail(@PathVariable String byPatientEmail) {
@@ -96,8 +96,8 @@ public class AppointmentRestController {
         }
     }*/
 
-    @PostMapping("/saveAppointment/1")
-    public ResponseEntity<ImageResponse> uploadFile( @RequestParam("file") MultipartFile images) throws Exception
+    /*@PostMapping("/saveAppointment/1")
+    public ResponseEntity<ImageResponse> uploadFile( @RequestPart("file") MultipartFile images, @RequestBody Appointment appointment) throws Exception
     {
         List<String> imageNames = new ArrayList<>();
 
@@ -105,15 +105,16 @@ public class AppointmentRestController {
             String imageName=iFileService.uploadFile(images, imageUploadPath);
             imageNames.add(imageName);
 
-//        appointment.setFile(imageName);
-//        appointmentRepository.save(appointment);
+        appointment.setFile(imageName);
         ImageResponse imageResponse = ImageResponse.builder()
                 .imageName(imageNames)
                 .message("image uploaded successfully")
                 .success(true)
                 .status(HttpStatus.CREATED).build();
+
+        appointmentRepository.save(appointment);
         return new ResponseEntity<ImageResponse>(imageResponse,HttpStatus.CREATED);
-    }
+    }*/
 
 
 

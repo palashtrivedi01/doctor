@@ -1,19 +1,17 @@
 package com.doctor.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+@Data
 @Table(name = "doctors")
 @Entity
 public class Doctor {

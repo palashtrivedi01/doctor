@@ -29,7 +29,7 @@ public class Appointment {
     @Column(name = "appointment_date", nullable = false)
     private Date appointmentDate;
 
-    @Column(name ="doctor_email", unique = true, nullable = false)
+    @Column(name ="doctor_email", nullable = false)
     private String doctorEmail;
 
     @Column(name ="doctor_name", nullable = false)
@@ -38,10 +38,10 @@ public class Appointment {
     @Column(name ="patient_name", nullable = false)
     private String patientName;
 
-    @Column(name ="patient_email", unique = true, nullable = false)
+    @Column(name ="patient_email", nullable = false)
     private String patientEmail;
 
-    @Column(name = "patient_mobile_no", unique = true, nullable = false)
+    @Column(name = "patient_mobile_no", nullable = false)
     private String patientMobileNo;
 
     @CreationTimestamp
