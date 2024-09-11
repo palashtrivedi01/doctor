@@ -12,14 +12,12 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class AppointmentResponceDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointment_id;
 
-    private MultipartFile fileName;
+    private String fileName;
 
     private Date appointment_date;
 

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/appointment")
@@ -21,12 +24,12 @@ public class AppointmentController {
 //
 //    @Autowired
 //    private FileStorageService fileStorageService;
-//
-//    @PostMapping("/saveAppointment")
-//    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
-//        Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
-//        return ResponseEntity.ok(appointment1);
-//    }
+
+    @PostMapping("/saveAppointment")
+    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
+        Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
+        return ResponseEntity.ok(appointment1);
+    }
 
     @GetMapping("/getAppointment/{patientEmail}")
     public ResponseEntity<Appointment> getAppointment(@PathVariable String patientEmail) {
@@ -35,19 +38,44 @@ public class AppointmentController {
     }
 
 
-    @PostMapping("/save")
-    public ResponseEntity<AppointmentResponceDto> saveAppoinment(
-            @RequestPart("appoinment") AppointmentRequestDto appointmentRequestDto,
-            @RequestPart("file") MultipartFile file) throws IOException {
-        AppointmentResponceDto savedAppointment = appointmentService.saveAppoinment(appointmentRequestDto, file);
-        return  new ResponseEntity<>(savedAppointment, HttpStatus.CREATED);
-    }
 }
-)
-public AppointmentResponceDto saveAppoinment(
-        @RequestPart("appoinment") AppointmentRequestDto appointmentRequestDto,
-        @RequestPart("file") MultipartFile file) throws IOException {
-    appointmentRequestDto.setFile(file);
-    return appointmentService.saveAppoinment(appointmentRequestDto);
 
-}
+//
+//@PostMapping("/save")
+//public ResponseEntity<String> saveAppoinment(
+//        @RequestPart("appoinment") AppointmentRequestDto appointmentRequestDto,
+//        @RequestPart("file") MultipartFile file) throws IOException {
+//    AppointmentResponceDto savedAppointment = appointmentService.saveAppoinment(appointmentRequestDto, file);
+//        return  new ResponseEntity<>(savedAppointment, HttpStatus.CREATED);
+//
+//}
+//}
+//
+//
+//@Override
+//public AppointmentResponceDto saveAppoinment(AppointmentRequestDto appointmentRequestDto, MultipartFile file) throws IOException {
+//    String fileName = null;
+//    if(file!= null && !file.isEmpty()){
+//        fileName=saveFile(file);
+//        appointmentRequestDto.setFile(file);
+//    }
+//    Appointment appointment = modelMapper.map(appointmentRequestDto,Appointment.class);
+//
+//    Appointment saveedAppoinment = appointmentRepository.save(appointment);
+//
+//    AppointmentResponceDto responceDto= modelMapper.map(saveedAppoinment,AppointmentResponceDto.class);
+//
+//    return responceDto;
+//}
+//private String saveFile (MultipartFile file) throws IOException{
+//    String originalFileName = file.getOriginalFilename();
+//    String uniqueFileName = System.currentTimeMillis() + " " + originalFileName;
+//    Path filePath = Paths.get(uploadDirectory,uniqueFileName);
+//    Files.createDirectories((filePath.getParent()));
+//    Files.write(filePath,file.getBytes());
+//    return  uniqueFileName;
+//}
+//}
+
+
+

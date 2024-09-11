@@ -8,11 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class AppointmentRequestDto {
 
-    private MultipartFile file;
+    private String file;
 
     private Date appointmentDate;
 

@@ -20,7 +20,7 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
 
-    private MultipartFile fileName;
+    private String fileName;
 
     private Date appointmentDate;
 
