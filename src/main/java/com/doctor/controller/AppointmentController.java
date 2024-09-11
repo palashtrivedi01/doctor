@@ -1,6 +1,8 @@
 package com.doctor.controller;
 
 import com.doctor.entity.Appointment;
+import com.doctor.exception.EmptyInputException;
+import com.doctor.exception.InvalidInputException;
 import com.doctor.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,17 +19,18 @@ import java.io.IOException;
 public class AppointmentController {
 
     @Autowired
-    private AppointmentService appointmentService;
+    private AppointmentService  appointmentService;
 
     @PostMapping("/saveAppointment")
     public ResponseEntity<Appointment> saveAppointment(@RequestParam Appointment appointment) {
+
         Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
         return ResponseEntity.ok(appointment1);
     }
 
     @GetMapping("/getAppointment/{patientEmail}")
-    public ResponseEntity<Appointment> getAppointmentByPatientEmail(@PathVariable String patientEmail) {
-        Appointment appointment = this.appointmentService.FindByEmail(patientEmail);
+    public ResponseEntity<Appointment> getAppointmentByPatientEmail(@PathVariable String patientEmail) throws Exception {
+        Appointment appointment = this.appointmentService.findByPatientEmail(patientEmail);
 
         return ResponseEntity.ok(appointment);
 

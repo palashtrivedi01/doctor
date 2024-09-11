@@ -1,13 +1,13 @@
 package com.doctor.services;
 
 import com.doctor.entity.Appointment;
-import com.doctor.repository.AppointmentRepo;
-import org.springframework.web.multipart.MultipartFile;
+import com.doctor.exception.EmptyInputException;
 
 
 public interface AppointmentService {
-    public Appointment saveAppointment(Appointment appointment);
+    Appointment saveAppointment(Appointment appointment);
+    Appointment findByPatientEmail(String patientEmail) throws Exception;
+    Appointment findAppointmentByDoctorEmail(String doctorEmail) throws Exception;
 
-    public Appointment FindByEmail(String patientEmail);
 
 }
