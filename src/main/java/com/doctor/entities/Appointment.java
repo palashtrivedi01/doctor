@@ -2,6 +2,7 @@ package com.doctor.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class Appointment {
 
     private Date appointmentDate;
 
+    @Email(message = "Enter valid mail")
     private String doctorEmail;
 
     private String doctorName;

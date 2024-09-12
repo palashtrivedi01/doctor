@@ -3,17 +3,10 @@ import com.doctor.dto.AppointmentRequestDto;
 import com.doctor.dto.AppointmentResponceDto;
 import com.doctor.entities.Appointment;
 import com.doctor.service.AppointmentService;
-//import com.doctor.service.FileStorageService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/appointment")
@@ -21,18 +14,15 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
-//
-//    @Autowired
-//    private FileStorageService fileStorageService;
 
     @PostMapping("/saveAppointment")
-    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
+    public ResponseEntity<Appointment> saveAppointment(@Valid  @RequestBody Appointment appointment) {
         Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
         return ResponseEntity.ok(appointment1);
     }
 
     @GetMapping("/getAppointment/{patientEmail}")
-    public ResponseEntity<Appointment> getAppointment(@PathVariable String patientEmail) {
+    public ResponseEntity<Appointment> getAppointment(@Valid @PathVariable String patientEmail) {
         Appointment byEmail = this.appointmentService.findByEmail(patientEmail);
         return ResponseEntity.ok(byEmail);
     }

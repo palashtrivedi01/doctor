@@ -2,7 +2,10 @@ package com.doctor.entities;
 
 import java.util.Date;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.aspectj.bridge.Message;
 
 @Data
 @Entity
@@ -15,11 +18,13 @@ public class Doctor {
 
     private String role;
 
+//    @Email(message = "Wrong email address ")
     private String doctorEmail;
 
     private String doctorGender;
 
-    private Long doctorMobileNumber;
+    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
+    private String doctorMobileNumber;
 
     private String doctorName;
 
