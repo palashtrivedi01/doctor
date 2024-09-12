@@ -8,20 +8,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(DoctorNotFoundException.class)
-    public ResponseEntity<APIResponseMessage> handleDoctorNotFoundException(DoctorNotFoundException exception) {
+    @ExceptionHandler(ControllerException.class)
+    public ResponseEntity<APIResponseMessage> handleDoctorNotFoundException(ControllerException exception) {
         APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
 
     }
-    @ExceptionHandler(EmptyInputException.class)
-    public ResponseEntity<APIResponseMessage> handleEmptyInputException(EmptyInputException exception) {
-        APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
-        return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<APIResponseMessage> handleInvalidInputException(InvalidInputException exception) {
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<APIResponseMessage> handleInvalidInputException(BusinessException exception) {
         APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
     }

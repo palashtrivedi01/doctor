@@ -2,7 +2,8 @@ package com.doctor.serviceimpl;
 
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
-import com.doctor.exception.DoctorNotFoundException;
+import com.doctor.exception.BusinessException;
+import com.doctor.exception.ControllerException;
 import com.doctor.repository.AppointmentRepo;
 import com.doctor.repository.DoctorRepo;
 import com.doctor.services.DoctorService;
@@ -30,7 +31,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor updateDoctor(Doctor doctor, String doctorEmail) throws DoctorNotFoundException {
+    public Doctor updateDoctor(Doctor doctor, String doctorEmail) throws BusinessException {
         Optional<Doctor> byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
         if (byDoctorEmail.isPresent()) {
             Doctor doctor1 = byDoctorEmail.get();
@@ -44,39 +45,42 @@ public class DoctorServiceImpl implements DoctorService {
             return doctor1;
         }
         else {
-            throw new DoctorNotFoundException("Doctor not found Exception");
+            throw new BusinessException("Doctor not found with given Doctor Email : "+ doctorEmail);
         }
     }
 
     @Override
-    public Doctor getDoctorByDoctorEmail(String doctorEmail) throws DoctorNotFoundException {
+    public Doctor getDoctorByDoctorEmail(String doctorEmail) throws  ControllerException {
         Optional<Doctor> byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
         if (byDoctorEmail.isPresent()) {
             return byDoctorEmail.get();
         }
-        throw new DoctorNotFoundException("Doctor not found Exception");
+        throw new ControllerException("Doctor not found with given Doctor Email : "+ doctorEmail);
     }
 
     @Override
-    public Doctor getDoctorByDoctorId(Long doctorId) throws DoctorNotFoundException {
+    public Doctor getDoctorByDoctorId(Long doctorId) throws ControllerException {
         if(doctorRepo.existsById(doctorId)) {
             return doctorRepo.findById(doctorId).get();
         }else {
-            throw new DoctorNotFoundException("Doctor not found Exception");
+            throw new ControllerException("Doctor not found with given Doctor Id: "+ doctorId);
         }
 
     }
 
     @Override
-    public List<Doctor> getAllDoctors() {
+    public List<Doctor> getAllDoctors() throws ControllerException {
         List<Doctor> all = doctorRepo.findAll();
+        if(all.isEmpty()) {
+            throw  new ControllerException("No Doctor available. ");
+        }
         return all;
     }
 
     @Override
-    public String deleteDoctor(Long doctorId) throws DoctorNotFoundException {
+    public String deleteDoctor(Long doctorId) throws ControllerException {
         if (!doctorRepo.existsById(doctorId)) {
-            throw new DoctorNotFoundException("Doctor not found Exception");
+            throw new ControllerException("Doctor not found Exception with  given Doctor Id : "+ doctorId);
         }
         doctorRepo.deleteById(doctorId);
         return "Doctor deleted successfully";
@@ -84,7 +88,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<Appointment> getAppointmentByDoctorEmail(String doctorEmail) throws DoctorNotFoundException {
+    public List<Appointment> getAppointmentByDoctorEmail(String doctorEmail) throws BusinessException {
         Optional<Doctor> doctor = doctorRepo.findByDoctorEmail(doctorEmail);
         Optional<List<Appointment>> appointment = appointmentRepo.findByDoctorEmail(doctorEmail);
 
@@ -93,7 +97,7 @@ public class DoctorServiceImpl implements DoctorService {
             return appointment.get();
         }
         else {
-            throw new DoctorNotFoundException("Doctor not found Exception");
+            throw new BusinessException("Doctor not found Exception with given email : "+ doctorEmail);
 
         }
     }

@@ -1,13 +1,11 @@
 package com.doctor.serviceimpl;
 
 import com.doctor.entity.Appointment;
-import com.doctor.exception.EmptyInputException;
 import com.doctor.exception.InvalidInputException;
 import com.doctor.repository.AppointmentRepo;
 import com.doctor.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.resource.ResourceUrlProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,15 +27,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment findByPatientEmail(String patientEmail) throws InvalidInputException, EmptyInputException {
+    public Appointment findByPatientEmail(String patientEmail) throws InvalidInputException {
         Optional<Appointment> optionalAppointment = appointmentRepo.findByPatientEmail(patientEmail);
         if (optionalAppointment.isPresent()) {
             return optionalAppointment.get();
         } else if (!optionalAppointment.equals(patientEmail)) {
-            throw new InvalidInputException("invalid input Exception");
+            throw new InvalidInputException("Invalid input Exception");
         }
         else {
-            throw new EmptyInputException("Input is Empty");
+            throw new InvalidInputException("Input is Empty !!!!");
         }
 
 
@@ -52,7 +50,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             return (Appointment) byDoctorEmail.get();
         }
         else {
-            throw new EmptyInputException("Input is Empty");
+            throw new InvalidInputException("Input is Empty");
         }
 
 

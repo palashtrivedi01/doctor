@@ -1,7 +1,6 @@
 package com.doctor.services;
 
 import com.doctor.entity.Appointment;
-import com.doctor.exception.EmptyInputException;
 
 
 public interface AppointmentService {
