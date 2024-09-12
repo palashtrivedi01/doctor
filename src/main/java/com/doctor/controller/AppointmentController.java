@@ -1,10 +1,14 @@
 package com.doctor.controller;
 
 import com.doctor.entity.Appointment;
+import com.doctor.requestdto.AppointmentRequestDto;
 import com.doctor.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -14,20 +18,24 @@ public class AppointmentController {
     @Autowired
     private AppointmentService  appointmentService;
 
-    @PostMapping("/saveAppointment")
-    public ResponseEntity<Appointment> saveAppointment(@RequestParam Appointment appointment) {
 
-        Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
+
+    @PostMapping("/saveAppointment")
+    public ResponseEntity<AppointmentRequestDto> saveAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto) {
+
+        AppointmentRequestDto appointment1 = this.appointmentService.saveAppointment(appointmentRequestDto);
         return ResponseEntity.ok(appointment1);
     }
 
     @GetMapping("/getAppointment/{patientEmail}")
-    public ResponseEntity<Appointment> getAppointmentByPatientEmail(@PathVariable String patientEmail) throws Exception {
-        Appointment appointment = this.appointmentService.findByPatientEmail(patientEmail);
+    public ResponseEntity<AppointmentRequestDto> getAppointmentByPatientEmail(@PathVariable String patientEmail) throws Exception {
+        AppointmentRequestDto appointment = this.appointmentService.findByPatientEmail(patientEmail);
 
         return ResponseEntity.ok(appointment);
 
     }
+
+
 
 
 //    @PostMapping("/upload")

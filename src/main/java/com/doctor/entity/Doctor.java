@@ -27,12 +27,12 @@ public class Doctor {
     private String resetPasswordToken;
     private Date updateDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "hospitalId")
     @JsonIgnore
     private HospitalDetails hospitalDetails;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Appointment> appointments;
 

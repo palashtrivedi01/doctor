@@ -25,12 +25,12 @@ public class Appointment {
     private String patientName;
     private Timestamp time;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "doctorId")
     private Doctor doctor;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "patientId")
     private Patient patient;

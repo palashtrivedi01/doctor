@@ -13,7 +13,7 @@ public class ContactUs {
     private String fullName;
     private Long mobileNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patientId")
     private Patient patient;
 

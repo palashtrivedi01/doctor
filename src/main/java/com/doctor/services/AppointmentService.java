@@ -1,12 +1,15 @@
 package com.doctor.services;
 
 import com.doctor.entity.Appointment;
+import com.doctor.requestdto.AppointmentRequestDto;
+
+import java.util.List;
 
 
 public interface AppointmentService {
-    Appointment saveAppointment(Appointment appointment);
-    Appointment findByPatientEmail(String patientEmail) throws Exception;
-    Appointment findAppointmentByDoctorEmail(String doctorEmail) throws Exception;
+    AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto);
+    AppointmentRequestDto findByPatientEmail(String patientEmail) throws Exception;
+
 
 
 }

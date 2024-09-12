@@ -17,7 +17,7 @@ public class HospitalDetails {
     private Integer noOfIcu;
     private Integer noOfOt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressId")
     private HospitalAddress hospitalAddress;
 

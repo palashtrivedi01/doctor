@@ -8,16 +8,15 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 
 public class AppointmentResponseDto {
-    private Long appointment_id;
+//    private Long appointmentId;
     private String file;
-    private Date appointment_date;
-    private String doctor_email;
-    private String doctor_name;
-    private String patient_email;
-    private String patient_name;
+    private Date appointmentDate;
+    private String doctorEmail;
+    private String doctorName;
+    private String patientEmail;
+    private String patientName;
     private Timestamp time;
 }
