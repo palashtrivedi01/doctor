@@ -29,7 +29,7 @@ public class DoctorRestController {
     }
 
     @PostMapping("/addDoctor")
-    public ResponseEntity<DoctorRequestDto> addDoctor(@Validated @RequestBody DoctorRequestDto doctorRequestDto){
+    public ResponseEntity<DoctorRequestDto> addDoctor(@Valid @RequestBody DoctorRequestDto doctorRequestDto){
         return new ResponseEntity<>(this.iDoctorService.saveDoctor(doctorRequestDto), HttpStatus.CREATED);
     }
 

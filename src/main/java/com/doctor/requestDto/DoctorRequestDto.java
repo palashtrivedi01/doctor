@@ -25,10 +25,12 @@ public class DoctorRequestDto {
     private String doctorGender;
 
     @Pattern(regexp = "[6789][0-9]{9}", message = "Enter valid mobile number")
-    private Long doctorMobileNumber;
+    private String doctorMobileNumber;
 
     private String doctorName;
 
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "Password must contain atleast one digit, one lowercase letter, one uppercase letter, one special character, no whitespace and must be atleast 8 characters long!")
     private String doctorPassword;
 
     private String doctorSpecialization;

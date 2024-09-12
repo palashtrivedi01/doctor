@@ -139,7 +139,7 @@ public class DoctorServiceImpl implements IDoctorService {
                 DoctorRequestDto doctorRequestDto = modelMapper.map(existingDoctor, DoctorRequestDto.class);
                 return doctorRequestDto;
             } else
-                throw new ControllerException("DOCTOR NOT FOUND    WITH GIVEN EMAIL : " + doctorEmail);
+                throw new ControllerException("DOCTOR NOT FOUND WITH GIVEN EMAIL : " + doctorEmail);
         }
     }
 

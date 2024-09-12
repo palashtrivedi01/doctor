@@ -5,10 +5,17 @@ import com.doctor.exception.ControllerException;
 import com.doctor.payloads.ApiResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,6 +56,19 @@ public class GlobalExceptionHandler {
                 .httpStatus(HttpStatus.NOT_ACCEPTABLE)
                 .build();
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception)
+    {
+        List<ObjectError> allErrors = exception.getBindingResult().getAllErrors();
+        Map<String, Object> response = new HashMap<>();
+        allErrors.stream().forEach(objectError->{
+            String message = objectError.getDefaultMessage();
+            String field = ((FieldError) objectError).getField();
+            response.put(field, message);
+        });
+        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
     }
 
 

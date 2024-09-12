@@ -3,6 +3,7 @@ package com.doctor.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -35,18 +36,22 @@ public class Doctor {
 
     @Column(name = "mobile_number", unique = true, nullable = false)
     @Pattern(regexp = "[6789][0-9]{9}", message = "Enter valid mobile number")
-    private Long doctorMobileNumber;
+    private String doctorMobileNumber;
 
     @Column(name = "name", nullable = false)
+    @Size(min = 3, max = 100)
     private String doctorName;
 
     @Column(name = "password", nullable = false)
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "Password must contain atleast one digit, one lowercase letter, one uppercase letter, one special character, no whitespace and must be atleast 8 characters long!")
     private String doctorPassword;
 
     @Column(name = "specialization")
     private String doctorSpecialization;
 
     @Column(name = "hospital_name", nullable = false)
+    @Size(min = 3, max = 100)
     private String hospitalName;
 
     @Column(name = "register_date", nullable = false)
