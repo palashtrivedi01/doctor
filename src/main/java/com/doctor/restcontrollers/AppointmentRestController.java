@@ -64,12 +64,12 @@ public class AppointmentRestController {
     }*/
 
     @PostMapping("/saveAppointment")  //This is working properly
-    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
-        return new ResponseEntity<>(this.iAppointmentService.saveAppointment(appointment), HttpStatus.CREATED);
+    public ResponseEntity<AppointmentRequestDto> saveAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto) {
+        return new ResponseEntity<>(this.iAppointmentService.saveAppointment(appointmentRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/getAppointment/{byPatientEmail}")
-    public ResponseEntity<Appointment> getAppointmentByPatientEmail(@PathVariable String byPatientEmail) {
+    public ResponseEntity<AppointmentRequestDto> getAppointmentByPatientEmail(@PathVariable String byPatientEmail) {
         return new ResponseEntity<>(this.iAppointmentService.findByEmail(byPatientEmail), HttpStatus.OK);
     }
 

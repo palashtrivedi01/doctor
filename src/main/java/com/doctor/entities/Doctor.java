@@ -1,6 +1,8 @@
 package com.doctor.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -24,12 +26,15 @@ public class Doctor {
     private String role;
 
     @Column(name = "email", unique = true, nullable = false)
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            message = "Email is mandatory and  must follow the pattern: abc@abc.com")
     private String doctorEmail;
 
     @Column(name = "gender")
     private String doctorGender;
 
     @Column(name = "mobile_number", unique = true, nullable = false)
+    @Pattern(regexp = "[6789][0-9]{9}", message = "Enter valid mobile number")
     private Long doctorMobileNumber;
 
     @Column(name = "name", nullable = false)

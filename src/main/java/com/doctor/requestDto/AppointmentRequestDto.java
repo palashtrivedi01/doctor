@@ -14,7 +14,7 @@ import java.util.List;
 
 //@Getter
 //@Setter
-@Data //Getter Setter ToString EqualsAndHashcode
+@Data //Getter Setter ToString EqualsAndHashcode RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentRequestDto {
@@ -39,12 +39,13 @@ public class AppointmentRequestDto {
     @CreationTimestamp
     private Timestamp time;
 
-    private Doctor doctors;
 
-    private Patient patients;
+//    private Doctor doctors;
+
+//    private Patient patients;
 
 //    ***********************************************************************
 
-    private List<String> imageNames;
+//    private List<String> imageNames;
 
 }

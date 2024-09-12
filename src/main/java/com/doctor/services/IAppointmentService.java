@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface IAppointmentService {
 
-    Appointment saveAppointment(Appointment appointment);
+    AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto);
 
-    Appointment findByEmail(String byPatientEmail);
+    AppointmentRequestDto findByEmail(String byPatientEmail);
 
 }

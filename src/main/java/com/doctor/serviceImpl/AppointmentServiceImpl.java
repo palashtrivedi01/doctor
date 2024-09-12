@@ -24,19 +24,25 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private ModelMapper modelMapper;
 
     @Override
-    public Appointment saveAppointment(Appointment appointment) {
+    public AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto) {
 
-//       Long doctorId = appointment.getDoctors().getDoctorId();
-//       Long patientId = appointment.getPatients().getPatientId();
+        Appointment appointment = modelMapper.map(appointmentRequestDto, Appointment.class);
 
-       Appointment savedAppointment = iAppointmentRepository.save(appointment);
-       return savedAppointment;
-       }
+       Appointment appointment1 = iAppointmentRepository.save(appointment);
+
+       AppointmentRequestDto newAppointmentRequestDto = modelMapper.map(appointment1, AppointmentRequestDto.class);
+       return newAppointmentRequestDto;
+    }
 
     @Override
-    public Appointment findByEmail(String byPatientEmail) {
+    public AppointmentRequestDto findByEmail(String byPatientEmail) {
         Optional<Appointment> optionalAppointment = Optional.ofNullable(this.iAppointmentRepository.findByPatientEmail(byPatientEmail));
-        return optionalAppointment.orElse(null);
+        Appointment appointment = optionalAppointment.get();
+
+        AppointmentRequestDto appointmentRequestDto = new AppointmentRequestDto();
+        BeanUtils.copyProperties(appointment, appointmentRequestDto);
+
+        return appointmentRequestDto;
     }
 
 }

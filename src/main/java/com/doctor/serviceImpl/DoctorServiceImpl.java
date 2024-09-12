@@ -2,7 +2,9 @@ package com.doctor.serviceImpl;
 
 import com.doctor.entities.Appointment;
 import com.doctor.entities.Doctor;
+import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
+import com.doctor.payloads.InputValidator;
 import com.doctor.repositories.IAppointmentRepository;
 import com.doctor.repositories.IDoctorRepository;
 import com.doctor.requestDto.AppointmentRequestDto;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +45,12 @@ public class DoctorServiceImpl implements IDoctorService {
 
     @Override
     public DoctorRequestDto saveDoctor(DoctorRequestDto doctorRequestDto) {
-
+        if(this.iDoctorRepository.existsByDoctorEmail(doctorRequestDto.getDoctorEmail())) {
+            throw new ControllerException("Doctor already exists with this email");
+        }
+        if(this.iDoctorRepository.existsByDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber())) {
+            throw new ControllerException("Doctor already exists with this mobile number");
+        }
         Doctor doctor = dtoToEntity(doctorRequestDto);
         Doctor savedDoctor = iDoctorRepository.save(doctor);
 
@@ -52,37 +60,47 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-    public DoctorRequestDto updateDoctor(String doctorEmail, DoctorRequestDto doctorRequestDto) {
-        Doctor savedDoctor = this.iDoctorRepository.findByDoctorEmail(doctorEmail);
-        if(savedDoctor != null) {
-            savedDoctor.setDoctorName(doctorRequestDto.getDoctorName());
-            savedDoctor.setDoctorEmail(doctorRequestDto.getDoctorEmail());
-            savedDoctor.setDoctorGender(doctorRequestDto.getDoctorGender());
-            savedDoctor.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
-            savedDoctor.setDoctorPassword(doctorRequestDto.getDoctorPassword());
-            savedDoctor.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
-            savedDoctor.setHospitalName(doctorRequestDto.getHospitalName());
-            savedDoctor.setRegisterDate(doctorRequestDto.getRegisterDate());
+    public DoctorRequestDto updateDoctor(String doctorEmail, DoctorRequestDto doctorRequestDto) throws BusinessException{
 
-            Doctor updatedDoctor = this.iDoctorRepository.save(savedDoctor);
-            DoctorRequestDto updatedDoctorRequestDto = modelMapper.map(updatedDoctor, DoctorRequestDto.class);
-            return updatedDoctorRequestDto;
-        }
-        else{
-           throw new ControllerException("DOCTOR NOT FOUND WITH EMAIL : " + doctorEmail);
-        }
+        if(InputValidator.isNumeric(doctorEmail)){
+            throw new BusinessException("INVALID INPUT, Number not acceptable!!!");
+       }
+       else {
+            Doctor savedDoctor = this.iDoctorRepository.findByDoctorEmail(doctorEmail);
+            if (savedDoctor != null) {
+                if(!doctorRequestDto.getDoctorEmail().equals(savedDoctor.getDoctorEmail()) && iDoctorRepository.existsByDoctorEmail(doctorRequestDto.getDoctorEmail())){
+                    throw new ControllerException("Update failed since doctor already exists with this email, try another email");
+                }
+                if(!doctorRequestDto.getDoctorMobileNumber().equals(savedDoctor.getDoctorMobileNumber()) && iDoctorRepository.existsByDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber())){
+                    throw new ControllerException("Update failed since given mobile number is already registered");
+                }
+                savedDoctor.setDoctorName(doctorRequestDto.getDoctorName());
+                savedDoctor.setDoctorEmail(doctorRequestDto.getDoctorEmail());
+                savedDoctor.setDoctorGender(doctorRequestDto.getDoctorGender());
+                savedDoctor.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
+                savedDoctor.setDoctorPassword(doctorRequestDto.getDoctorPassword());
+                savedDoctor.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
+                savedDoctor.setHospitalName(doctorRequestDto.getHospitalName());
+                savedDoctor.setRegisterDate(doctorRequestDto.getRegisterDate());
 
+                Doctor updatedDoctor = this.iDoctorRepository.save(savedDoctor);
+                DoctorRequestDto updatedDoctorRequestDto = modelMapper.map(updatedDoctor, DoctorRequestDto.class);
+                return updatedDoctorRequestDto;
+            } else {
+                throw new ControllerException("DOCTOR NOT FOUND WITH EMAIL : " + doctorEmail);
+            }
+       }
     }
 
     @Override
-    public String deleteDoctor(Long doctorId) {
-        Optional<Doctor> existingDoctor = this.iDoctorRepository.findById(doctorId);
-        if(existingDoctor.isPresent()){
-            this.iDoctorRepository.deleteById(doctorId);
-            return "";
-        }
-        else
-            throw new ControllerException("DOCTOR NOT FOUND WITH ID : " + doctorId);
+    public String deleteDoctor(Long doctorId) throws BusinessException {
+            Optional<Doctor> existingDoctor = this.iDoctorRepository.findById(doctorId);
+            if(existingDoctor.isPresent()){
+                this.iDoctorRepository.deleteById(doctorId);
+                return "";
+            }
+            else
+                throw new ControllerException("DOCTOR NOT FOUND WITH ID : " + doctorId);
     }
 
     @Override
@@ -111,23 +129,28 @@ public class DoctorServiceImpl implements IDoctorService {
 
 
     @Override
-    public DoctorRequestDto getDoctorByEmail(String doctorEmail) {
-          Doctor existingDoctor = this.iDoctorRepository.findByDoctorEmail(doctorEmail);
-          if (existingDoctor != null) {
-              DoctorRequestDto doctorRequestDto = modelMapper.map(existingDoctor, DoctorRequestDto.class);
-              return doctorRequestDto;
-          }
-          else
-              throw new ControllerException("DOCTOR NOT AVAILABLE WITH GIVEN EMAIL : " + doctorEmail);
+    public DoctorRequestDto getDoctorByEmail(String doctorEmail) throws BusinessException {
+        if(InputValidator.isNumeric(doctorEmail)){
+            throw new BusinessException("INVALID INPUT, Number not acceptable!!!");
+        }
+        else {
+            Doctor existingDoctor = this.iDoctorRepository.findByDoctorEmail(doctorEmail);
+            if (existingDoctor != null) {
+                DoctorRequestDto doctorRequestDto = modelMapper.map(existingDoctor, DoctorRequestDto.class);
+                return doctorRequestDto;
+            } else
+                throw new ControllerException("DOCTOR NOT FOUND    WITH GIVEN EMAIL : " + doctorEmail);
+        }
     }
 
     @Override
-    public List<AppointmentRequestDto> findAppointmentsByDoctorEmail(String doctorEmail) {
+    public List<AppointmentRequestDto> findAppointmentsByDoctorEmail(String doctorEmail) throws BusinessException {
+        if(InputValidator.isNumeric(doctorEmail)){
+            throw new BusinessException("INVALID INPUT, Number not acceptable!!!");
+        }
         Optional<Doctor> optionalDoctor = Optional.ofNullable(this.iDoctorRepository.findByDoctorEmail(doctorEmail));
         if(optionalDoctor.isPresent()){
             List<Appointment> listOfAppointments = this.iAppointmentRepository.findByDoctorEmail(doctorEmail);
-//        AppointmentRequestDto appointmentRequestDto = new AppointmentRequestDto();
-//        BeanUtils.copyProperties(listOfAppointments, appointmentRequestDto);
 
             List<AppointmentRequestDto> appointmentRequestDtoList = listOfAppointments.stream()
                     .map((appointment -> modelMapper.map(appointment, AppointmentRequestDto.class)))
