@@ -1,8 +1,11 @@
 package com.doctor.service;
 
+import com.doctor.entities.Appointment;
 import com.doctor.entities.Doctor;
 import com.doctor.exception.ControllerException;
+import com.doctor.repository.AppointmentRepository;
 import com.doctor.repository.DoctorRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,23 @@ public class HelloDoctorServices implements DoctorServiceInterface{
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    //public Doctor doctorRequestDTO(Doctor doctor) {
+       // if (doctorRepository.existsById(doctor.getDoctorId())) {
+         //   throw new ControllerException("Doctor already exists");
+        //} else {
+         //   return this.doctorRepository.save(doctor);
+
+       // }
+  //  }
+
 
     @Override
     public Doctor addDoctor(Doctor doctor) {
@@ -90,7 +110,17 @@ public class HelloDoctorServices implements DoctorServiceInterface{
             this.doctorRepository.deleteById(doctorId);
         }
         return "deleted";
-    }}
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByDoctorEmail(String doctorEmail) {
+        List<Appointment> appointment = this.appointmentRepository.findByDoctorEmail(doctorEmail);
+        return appointment;
+    }
+
+
+
+}
 
 
 

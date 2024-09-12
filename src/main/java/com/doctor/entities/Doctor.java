@@ -3,6 +3,7 @@ package com.doctor.entities;
 import com.doctor.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -18,9 +19,16 @@ public class Doctor {
 
     private Long doctorId;
     private Role role;
+
+    @Column(unique = true)
     private String doctorEmail;
+
     private String doctorGender;
+
+    @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits")
+    @Column(unique = true)
     private String doctorMobileNumber;
+
     private String doctorName;
     private String doctorPassword;
     private String doctorSpecialization;

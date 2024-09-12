@@ -8,23 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 @Data
 @Entity
+
 public class HospitalDetails {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private long hospital_id;
+     private long hospitalId;
 
     private  String emergency;
 
-    private  Integer contact_number;
+    @Column(unique=true)
+    private  Integer contactNumber;
 
-    private String hospital_name;
+    private String hospitalName;
 
-    private Integer no_of_beds;
+    private Integer noOfBeds;
 
-    private Integer no_of_icu;
+    private Integer noOfIcu;
 
-    private Integer no_of_ot;
+    private Integer noOfOt;
 
     @Column(name="hospital_address")
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

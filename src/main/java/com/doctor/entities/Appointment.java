@@ -11,33 +11,35 @@ import java.time.LocalDate;
 @Entity
 public class Appointment {
     @Id
-    @NotNull
+//    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long appointment_id;
+    private Long appointmentId;
 
     private String file;
 
-    private LocalDate appointment_date;
+    private LocalDate appointmentDate;
 
-    private String doctor_email;
+    private String doctorEmail;
 
-    private String doctor_name;
-
+    private String doctorName;
+    @Column(unique = true)
     private String patientEmail;
 
-    private Long patient_mobile_number;
+    private Long patientMobileNumber;
 
-    private String patient_name;
+    private String patientName;
 
     private LocalDate time;
 
     @ManyToOne
     @JsonIgnore
-    private Doctor doctor_id;
+    @JoinColumn(name = "doctorId")
+    private Doctor doctorId;
 
     @ManyToOne
     @JsonIgnore
-    private Patient patient_id;
+    @JoinColumn(name = "patientId")
+    private Patient patientId;
 
 
 }

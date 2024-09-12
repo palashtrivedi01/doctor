@@ -8,12 +8,13 @@ import org.antlr.v4.runtime.misc.NotNull;
 @Entity
 public class Users {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(unique = true)
     private  String email;
 
+    @Column(unique = true)
     private Long mobile;
 
     private  String password;

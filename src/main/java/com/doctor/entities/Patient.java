@@ -1,9 +1,6 @@
 package com.doctor.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -15,22 +12,22 @@ public class Patient {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long patient_id;
+    private Long patientId;
+    @Column(unique = true)
+    private String patientEmail;
+    @Column(unique = true)
+    private Long patientMobileNumber;
 
-    private String patient_email;
+    private String patientName;
 
-    private Long patient_mobile_number;
+    private String patientPassword;
 
-    private String patient_name;
+    private LocalDate registerDate;
 
-    private String patient_password;
-
-    private LocalDate register_date;
-
-    private String reset_password_token;
+    private String resetPasswordToken;
 
     private String role;
 
-    private LocalDate updated_date;
+    private LocalDate updatedDate;
 
 }
