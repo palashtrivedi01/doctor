@@ -1,5 +1,6 @@
 package com.doctor.serviceImpl;
 
+import com.doctor.ENUM.Gender;
 import com.doctor.entities.Appointment;
 import com.doctor.entities.Doctor;
 import com.doctor.exception.BusinessException;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,12 +53,25 @@ public class DoctorServiceImpl implements IDoctorService {
         if(this.iDoctorRepository.existsByDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber())) {
             throw new ControllerException("Doctor already exists with this mobile number");
         }
-        Doctor doctor = dtoToEntity(doctorRequestDto);
-        Doctor savedDoctor = iDoctorRepository.save(doctor);
 
-        DoctorRequestDto newDoctorRequestDto = entityToDto(savedDoctor);
+        Gender inputGender = Arrays.stream(Gender.values())
+                .filter(gender -> gender.name().equalsIgnoreCase(doctorRequestDto.getDoctorGender()))
+                .findFirst()
+                .orElse(null);
 
-        return newDoctorRequestDto;
+        if (inputGender != null) {
+            Doctor doctor = dtoToEntity(doctorRequestDto);
+            doctor.setDoctorGender(inputGender);
+            Doctor savedDoctor = iDoctorRepository.save(doctor);
+
+            DoctorRequestDto newDoctorRequestDto = entityToDto(savedDoctor);
+
+            return newDoctorRequestDto;
+        } else {
+            throw new ControllerException("You can choose gender as only Male, Female or Others");
+
+        }
+
     }
 
     @Override
@@ -76,7 +91,28 @@ public class DoctorServiceImpl implements IDoctorService {
                 }
                 savedDoctor.setDoctorName(doctorRequestDto.getDoctorName());
                 savedDoctor.setDoctorEmail(doctorRequestDto.getDoctorEmail());
-                savedDoctor.setDoctorGender(doctorRequestDto.getDoctorGender());
+
+               /* if(Arrays.stream(Gender.values())
+                        .anyMatch(gender1 -> gender1.equals
+                                (String.valueOf((doctorRequestDto.getDoctorGender())))))
+                    savedDoctor.setDoctorGender(Gender.valueOf(doctorRequestDto.getDoctorGender()));
+                else
+                    throw new BusinessException("You can choose gender as only Male, Female or Others");
+                */
+
+                Gender inputGender = Arrays.stream(Gender.values())
+                        .filter(gender -> gender.name().equalsIgnoreCase(doctorRequestDto.getDoctorGender()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (inputGender != null) {
+                    savedDoctor.setDoctorGender(inputGender);
+                } else {
+                    throw new BusinessException("You can choose gender as only Male, Female or Others");
+
+                }
+
+
                 savedDoctor.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
                 savedDoctor.setDoctorPassword(doctorRequestDto.getDoctorPassword());
                 savedDoctor.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());

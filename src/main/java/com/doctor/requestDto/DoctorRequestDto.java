@@ -4,6 +4,7 @@ import com.doctor.entities.HospitalDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class DoctorRequestDto {
     @Pattern(regexp = "[6789][0-9]{9}", message = "Enter valid mobile number")
     private String doctorMobileNumber;
 
+    @Column(name = "name", nullable = false)
+    @Size(min = 3, max = 100, message = "Name must contain min 3 and max 100 characters")
     private String doctorName;
 
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
@@ -35,6 +38,8 @@ public class DoctorRequestDto {
 
     private String doctorSpecialization;
 
+    @Column(name = "hospital_name", nullable = false)
+    @Size(min = 3, max = 100, message = "Hospital name must contain min 3 and max 100 characters")
     private String hospitalName;
 
     private Date registerDate;

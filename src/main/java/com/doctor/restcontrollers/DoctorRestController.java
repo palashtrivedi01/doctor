@@ -34,7 +34,7 @@ public class DoctorRestController {
     }
 
     @PutMapping("/updateDoctor/{doctorEmail}")
-    public ResponseEntity<DoctorRequestDto> updateDoctor(@PathVariable String doctorEmail, @RequestBody DoctorRequestDto doctorRequestDto) throws BusinessException {
+    public ResponseEntity<DoctorRequestDto> updateDoctor(@PathVariable String doctorEmail,@Valid @RequestBody DoctorRequestDto doctorRequestDto) throws BusinessException {
         return new ResponseEntity<>(this.iDoctorService.updateDoctor(doctorEmail, doctorRequestDto), HttpStatus.OK);
     }
 

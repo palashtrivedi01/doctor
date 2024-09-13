@@ -2,6 +2,7 @@ package com.doctor.restcontrollers;
 
 import com.doctor.entities.Appointment;
 //import com.doctor.payloads.FileResponseMessage;
+import com.doctor.exception.BusinessException;
 import com.doctor.payloads.ImageResponse;
 import com.doctor.repositories.IAppointmentRepository;
 import com.doctor.requestDto.AppointmentRequestDto;
@@ -9,6 +10,7 @@ import com.doctor.responseDto.AppointmentResponseDto;
 import com.doctor.services.IAppointmentService;
 import com.doctor.services.IFileService;
 //import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -37,7 +39,7 @@ public class AppointmentRestController {
     private IFileService iFileService;
 
     @Autowired
-    private IAppointmentRepository appointmentRepository;
+    private IAppointmentRepository iAppointmentRepository;
 
     @Value("${appointment.profile.image.path}")
     private String imageUploadPath;
@@ -64,7 +66,7 @@ public class AppointmentRestController {
     }*/
 
     @PostMapping("/saveAppointment")  //This is working properly
-    public ResponseEntity<AppointmentRequestDto> saveAppointment(@RequestBody AppointmentRequestDto appointmentRequestDto) {
+    public ResponseEntity<AppointmentRequestDto> saveAppointment(@Valid @RequestBody AppointmentRequestDto appointmentRequestDto) {
         return new ResponseEntity<>(this.iAppointmentService.saveAppointment(appointmentRequestDto), HttpStatus.CREATED);
     }
 
@@ -115,6 +117,26 @@ public class AppointmentRestController {
         appointmentRepository.save(appointment);
         return new ResponseEntity<ImageResponse>(imageResponse,HttpStatus.CREATED);
     }*/
+
+    @PutMapping("/updateAppointment/{appointmentId}")
+    public ResponseEntity<AppointmentRequestDto> updateAppointment(@PathVariable Long appointmentId, @Valid @RequestBody AppointmentRequestDto appointmentRequestDto) throws BusinessException {
+        return new ResponseEntity<>(this.iAppointmentService.updateAppointment(appointmentId, appointmentRequestDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteAppointment/{idOfAppointment}")
+    public ResponseEntity<String> deleteAppointment(@PathVariable("idOfAppointment") Long appointmentId) throws BusinessException {
+        return new ResponseEntity<>(this.iAppointmentService.deleteAppointment(appointmentId), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/getAppointmentByAppointmentId")
+    public ResponseEntity<AppointmentRequestDto> getAppointmentByAppointmentId(@RequestParam("appointmentId") Long appointmentId) throws BusinessException {
+        return new ResponseEntity<>(this.iAppointmentService.getAppointment(appointmentId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllAppointments")
+    public ResponseEntity<List<AppointmentRequestDto>> getAllAppointments() throws BusinessException {
+        return new ResponseEntity<>(this.iAppointmentService.getAllAppointments(), HttpStatus.OK);
+    }
 
 
 

@@ -3,10 +3,12 @@ package com.doctor.handler;
 import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
 import com.doctor.payloads.ApiResponseMessage;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,7 +24,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ControllerException.class)
        public ResponseEntity<ApiResponseMessage> controllerException(ControllerException controllerException) {
-
            ApiResponseMessage responseMessage = ApiResponseMessage.builder()
                    .message(controllerException.getMessage())
                    .httpStatus(HttpStatus.BAD_REQUEST)
@@ -58,6 +59,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiResponseMessage> methodArgumentTypeMismatchException(HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException) {
+        ApiResponseMessage message = ApiResponseMessage.builder()
+                .message("Invalid Input")
+                .httpStatus(HttpStatus.NOT_ACCEPTABLE)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception)
     {
@@ -70,6 +81,10 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
     }
+
+
+
+
 
 
 }
