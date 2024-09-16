@@ -28,8 +28,8 @@ public class Patient {
     private String role;
     private Date updateDate;
 
-    @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
-    private List<Appointment> appointments;
+//    @OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
+//    private List<Appointment> appointments;
 
 
 

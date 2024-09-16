@@ -9,7 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,37 +17,41 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private AppointmentRepo appointmentRepo;
-    @Autowired
-    private ModelMapper modelMapper;
-
 
     @Override
     public AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto) {
-        System.out.println(appointmentRequestDto);
-        Appointment appointment = modelMapper.map(appointmentRequestDto, Appointment.class);
-        Appointment appointment1 = appointmentRepo.save(appointment);
-        AppointmentRequestDto map = modelMapper.map(appointment1, AppointmentRequestDto.class);
-        System.out.println(map);
-        return map;
-
+        Appointment a = new Appointment();
+        a.setDoctorName(appointmentRequestDto.getDoctorName());
+        a.setFile(appointmentRequestDto.getFile());
+        a.setAppointmentDate(appointmentRequestDto.getAppointmentDate());
+        a.setDoctorEmail(appointmentRequestDto.getDoctorEmail());
+        a.setPatientName(appointmentRequestDto.getPatientName());
+        a.setPatientEmail(appointmentRequestDto.getPatientEmail());
+        a.setTime(appointmentRequestDto.getTime());
+        //BeanUtils.copyProperties(appointmentRequestDto, a);
+        appointmentRepo.save(a);
+        return appointmentRequestDto;
     }
 
     @Override
-    public AppointmentRequestDto findByPatientEmail(String patientEmail) throws InvalidInputException {
-        Optional<Appointment> optionalAppointment = appointmentRepo.findByPatientEmail(patientEmail);
-        if (optionalAppointment.isPresent()) {
-            ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(optionalAppointment.get(), AppointmentRequestDto.class);
-
-//            return optionalAppointment.get();
-        } else if (!optionalAppointment.equals(patientEmail)) {
+    public List<AppointmentRequestDto> findByPatientEmail(String patientEmail) throws InvalidInputException {
+        List<Appointment> optionalAppointment = appointmentRepo.findByPatientEmail(patientEmail);
+        if (optionalAppointment == null || optionalAppointment.isEmpty()) {
             throw new InvalidInputException("Invalid input Exception");
-        } else {
-            throw new InvalidInputException("Input is Empty !!!!");
         }
 
 
+        List<AppointmentRequestDto> list = optionalAppointment.stream().map(appointment -> {
+            AppointmentRequestDto dto = new AppointmentRequestDto();
+            dto.setDoctorName(appointment.getDoctorName());
+            dto.setFile(appointment.getFile());
+            dto.setAppointmentDate(appointment.getAppointmentDate());
+            dto.setDoctorEmail(appointment.getDoctorEmail());
+            dto.setPatientName(appointment.getPatientName());
+            dto.setPatientEmail(appointment.getPatientEmail());
+            dto.setTime(appointment.getTime());
+            return dto;
+        }).toList();
+        return list;
     }
-
-
 }

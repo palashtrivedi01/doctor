@@ -1,12 +1,7 @@
 package com.doctor.controller;
 
-import com.doctor.entity.Appointment;
-
 import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
-
-import com.doctor.repository.DoctorRepo;
-
 import com.doctor.requestdto.AppointmentRequestDto;
 import com.doctor.requestdto.DoctorRequestDto;
 import com.doctor.services.DoctorService;
@@ -14,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -38,8 +32,8 @@ public class DoctorController {
 
     @PutMapping("/updateDoctor/{doctorEmail}")
     public ResponseEntity<DoctorRequestDto> updateDoctor(@RequestBody DoctorRequestDto doctorRequestDto, @PathVariable String doctorEmail) throws BusinessException {
-        doctorService.updateDoctor(doctorRequestDto, doctorEmail);
-        return new ResponseEntity<>(doctorRequestDto, HttpStatus.OK);
+        DoctorRequestDto dto = doctorService.updateDoctor(doctorRequestDto, doctorEmail);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 
@@ -51,7 +45,7 @@ public class DoctorController {
     }
 
     @GetMapping("doctorId/{doctorId}")
-    public ResponseEntity<DoctorRequestDto> getDoctorById(@PathVariable Long doctorId) throws BusinessException, ControllerException {
+    public ResponseEntity<DoctorRequestDto> getDoctorById(@PathVariable Long doctorId) throws  ControllerException {
         DoctorRequestDto doctorByDoctorId = doctorService.getDoctorByDoctorId(doctorId);
         return new ResponseEntity<>(doctorByDoctorId, HttpStatus.OK);
     }
@@ -71,7 +65,7 @@ public class DoctorController {
     @GetMapping("/getAppointment/{doctorEmail}")
     public ResponseEntity<List<AppointmentRequestDto>> getAppointmentByDoctorEmail(@PathVariable String doctorEmail) throws BusinessException {
         List<AppointmentRequestDto> appointmentByDoctorEmail = doctorService.getAppointmentByDoctorEmail(doctorEmail);
-        return ResponseEntity.ok( appointmentByDoctorEmail);
+        return ResponseEntity.ok(appointmentByDoctorEmail);
 
     }
 

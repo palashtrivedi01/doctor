@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(ControllerException.class)
     public ResponseEntity<APIResponseMessage> handleDoctorNotFoundException(ControllerException exception) {
         APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();

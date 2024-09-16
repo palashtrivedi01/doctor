@@ -4,18 +4,15 @@ import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
-import com.doctor.exception.InvalidInputException;
 import com.doctor.repository.AppointmentRepo;
 import com.doctor.repository.DoctorRepo;
 import com.doctor.requestdto.AppointmentRequestDto;
 import com.doctor.requestdto.DoctorRequestDto;
 import com.doctor.services.DoctorService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -26,34 +23,42 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private AppointmentRepo appointmentRepo;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-
     @Override
     public DoctorRequestDto addDoctor(DoctorRequestDto doctorRequestDto) {
-        Doctor doctor = modelMapper.map(doctorRequestDto, Doctor.class);
-        Doctor doctor1 = doctorRepo.save(doctor);
-        DoctorRequestDto doctorRequestDto1 = new DoctorRequestDto();
-        modelMapper.map(doctor, doctorRequestDto1);
-        return doctorRequestDto1;
+        Doctor doctor = new Doctor();
+        doctor.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
+        doctor.setDoctorName(doctorRequestDto.getDoctorName());
+        doctor.setDoctorPassword(doctorRequestDto.getDoctorPassword());
+        doctor.setDoctorGender(doctorRequestDto.getDoctorGender());
+        doctor.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
+        doctor.setDoctorEmail(doctorRequestDto.getDoctorEmail());
+        doctor.setRegisterDate(doctorRequestDto.getRegisterDate());
+        doctor.setHospitalName(doctorRequestDto.getHospitalName());
+        doctor.setResetPasswordToken(doctorRequestDto.getResetPasswordToken());
+        doctor.setRole(doctorRequestDto.getRole());
+        doctor.setUpdateDate(doctorRequestDto.getUpdateDate());
+        doctorRepo.save(doctor);
+        return doctorRequestDto;
     }
 
     @Override
     public DoctorRequestDto updateDoctor(DoctorRequestDto doctorRequestDto, String doctorEmail) throws BusinessException {
-        Optional<Doctor> byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
-        if (byDoctorEmail.isPresent()) {
-            Doctor doctor1 = byDoctorEmail.get();
-            doctor1.setDoctorName(doctorRequestDto.getDoctorName());
-            doctor1.setDoctorGender(doctorRequestDto.getDoctorGender());
-            doctor1.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
-            doctor1.setDoctorPassword(doctorRequestDto.getDoctorPassword());
-            doctor1.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
-            doctor1.setDoctorEmail(doctorEmail);
-            Doctor save = doctorRepo.save(doctor1);
-            DoctorRequestDto doctorRequestDto1 = new DoctorRequestDto();
-            modelMapper.map(doctor1, doctorRequestDto1);
-            return doctorRequestDto1;
+        Doctor byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
+        DoctorRequestDto dto = new DoctorRequestDto();
+        if (byDoctorEmail != null) {
+            dto.setDoctorName(doctorRequestDto.getDoctorName());
+            dto.setDoctorGender(doctorRequestDto.getDoctorGender());
+            dto.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
+            dto.setDoctorPassword(doctorRequestDto.getDoctorPassword());
+            dto.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
+            dto.setDoctorEmail(doctorEmail);
+            dto.setRegisterDate(doctorRequestDto.getRegisterDate());
+            dto.setHospitalName(doctorRequestDto.getHospitalName());
+            dto.setResetPasswordToken(doctorRequestDto.getResetPasswordToken());
+            dto.setRole(doctorRequestDto.getRole());
+            dto.setUpdateDate(doctorRequestDto.getUpdateDate());
+            doctorRepo.save(byDoctorEmail);
+            return dto;
         } else {
             throw new BusinessException("Doctor not found with given Doctor Email : " + doctorEmail);
         }
@@ -61,38 +66,68 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorRequestDto getDoctorByDoctorEmail(String doctorEmail) throws ControllerException {
-        Optional<Doctor> byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
-        if (byDoctorEmail.isPresent()) {
-            ModelMapper modelMapper = new ModelMapper();
-            Doctor doctor = modelMapper.map(byDoctorEmail.get(), Doctor.class);
+        Doctor byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
+        if (byDoctorEmail != null) {
             DoctorRequestDto doctorRequestDto = new DoctorRequestDto();
-            modelMapper.map(doctor, doctorRequestDto);
+            doctorRequestDto.setDoctorEmail(byDoctorEmail.getDoctorEmail());
+            doctorRequestDto.setDoctorName(byDoctorEmail.getDoctorName());
+            doctorRequestDto.setDoctorPassword(byDoctorEmail.getDoctorPassword());
+            doctorRequestDto.setDoctorGender(byDoctorEmail.getDoctorGender());
+            doctorRequestDto.setDoctorMobileNumber(byDoctorEmail.getDoctorMobileNumber());
+            doctorRequestDto.setDoctorEmail(byDoctorEmail.getDoctorEmail());
+            doctorRequestDto.setDoctorSpecialization(byDoctorEmail.getDoctorSpecialization());
+            doctorRequestDto.setHospitalName(byDoctorEmail.getHospitalName());
+            doctorRequestDto.setResetPasswordToken(byDoctorEmail.getResetPasswordToken());
+            doctorRequestDto.setRole(byDoctorEmail.getRole());
+            doctorRequestDto.setUpdateDate(byDoctorEmail.getUpdateDate());
+            doctorRequestDto.setRegisterDate(byDoctorEmail.getRegisterDate());
+            doctorRequestDto.setDoctorGender(byDoctorEmail.getDoctorGender());
             return doctorRequestDto;
+
         }
         throw new ControllerException("Doctor not found with given Doctor Email : " + doctorEmail);
     }
 
     @Override
     public DoctorRequestDto getDoctorByDoctorId(Long doctorId) throws ControllerException {
-        if (doctorRepo.existsById(doctorId)) {
-            ModelMapper modelMapper = new ModelMapper();
-            return modelMapper.map(doctorRepo.findById(doctorId).get(), DoctorRequestDto.class);
+        Doctor doctor = doctorRepo.findById(doctorId).isPresent() ? doctorRepo.findById(doctorId).get() : null;
+        if (doctor != null) {
+            DoctorRequestDto doctorRequestDto = new DoctorRequestDto();
+            doctorRequestDto.setDoctorName(doctor.getDoctorName());
+            doctorRequestDto.setDoctorGender(doctor.getDoctorGender());
+            doctorRequestDto.setDoctorMobileNumber(doctor.getDoctorMobileNumber());
+            doctorRequestDto.setDoctorEmail(doctor.getDoctorEmail());
+            doctorRequestDto.setRegisterDate(doctor.getRegisterDate());
+            doctorRequestDto.setHospitalName(doctor.getHospitalName());
+            doctorRequestDto.setResetPasswordToken(doctor.getResetPasswordToken());
+            doctorRequestDto.setRole(doctor.getRole());
+            doctorRequestDto.setUpdateDate(doctor.getUpdateDate());
+            return doctorRequestDto;
         } else {
             throw new ControllerException("Doctor not found with given Doctor Id: " + doctorId);
         }
-
     }
 
     @Override
     public List<DoctorRequestDto> getAllDoctors() throws ControllerException {
         List<Doctor> allDoctors = doctorRepo.findAll();
-        List<DoctorRequestDto> collect = allDoctors.stream().map(doctor -> modelMapper.map(doctor, DoctorRequestDto.class)).collect(Collectors.toList());
         if (allDoctors.isEmpty()) {
-            throw new ControllerException("No Doctor available. ");
+            throw new ControllerException("No doctors found");
         }
-
-
-        return collect;
+        return allDoctors.stream().map(doctor -> {
+            DoctorRequestDto doctorRequestDto = new DoctorRequestDto();
+            doctorRequestDto.setDoctorName(doctor.getDoctorName());
+            doctorRequestDto.setDoctorGender(doctor.getDoctorGender());
+            doctorRequestDto.setDoctorMobileNumber(doctor.getDoctorMobileNumber());
+            doctorRequestDto.setDoctorEmail(doctor.getDoctorEmail());
+            doctorRequestDto.setRegisterDate(doctor.getRegisterDate());
+            doctorRequestDto.setHospitalName(doctor.getHospitalName());
+            doctorRequestDto.setResetPasswordToken(doctor.getResetPasswordToken());
+            doctorRequestDto.setRole(doctor.getRole());
+            doctorRequestDto.setDoctorSpecialization(doctor.getDoctorSpecialization());
+            doctorRequestDto.setUpdateDate(doctor.getUpdateDate());
+            return doctorRequestDto;
+        }).toList();
     }
 
     @Override
@@ -108,20 +143,25 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<AppointmentRequestDto> getAppointmentByDoctorEmail(String doctorEmail) throws BusinessException {
-        Optional<Doctor> doctor = doctorRepo.findByDoctorEmail(doctorEmail);
-        Optional<Appointment> appointment = appointmentRepo.findByDoctorEmail(doctorEmail);
+        Doctor byDoctorEmail = doctorRepo.findByDoctorEmail(doctorEmail);
+        List<Appointment> appointment = appointmentRepo.findByDoctorEmail(doctorEmail);
+        if (byDoctorEmail != null && !appointment.isEmpty()) {
 
-
-        if (doctor.isPresent() && appointment.isPresent()) {
-            List<AppointmentRequestDto> list = appointment.stream().map(e -> modelMapper.map(e, AppointmentRequestDto.class)).toList();
+            List<AppointmentRequestDto> list= appointment.stream().map(a -> {
+                AppointmentRequestDto dto = new AppointmentRequestDto();
+                dto.setDoctorName(a.getDoctorName());
+                dto.setDoctorEmail(a.getDoctorEmail());
+                dto.setTime(a.getTime());
+                dto.setDoctorEmail(a.getDoctorEmail());
+                dto.setFile(a.getFile());
+                dto.setAppointmentDate(a.getAppointmentDate());
+                return dto;
+            }).toList();
             return list;
-        }
-        else {
-            throw new BusinessException("Doctor not found Exception with given email : "+ doctorEmail);
-
+        } else {
+            throw new BusinessException("Doctor not found Exception with given email : " + doctorEmail);
         }
     }
-
 
 
 }

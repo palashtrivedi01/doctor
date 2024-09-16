@@ -1,6 +1,5 @@
 package com.doctor.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,9 +7,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-//@Getter
-//@Setter
-
 @Data
 @Table(name = "appointments")
 public class Appointment {
@@ -26,12 +22,11 @@ public class Appointment {
     private Timestamp time;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
     @JoinColumn(name = "doctorId")
     private Doctor doctor;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patientId")
     private Patient patient;
+
 }

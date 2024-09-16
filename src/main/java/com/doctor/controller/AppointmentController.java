@@ -28,8 +28,8 @@ public class AppointmentController {
     }
 
     @GetMapping("/getAppointment/{patientEmail}")
-    public ResponseEntity<AppointmentRequestDto> getAppointmentByPatientEmail(@PathVariable String patientEmail) throws Exception {
-        AppointmentRequestDto appointment = this.appointmentService.findByPatientEmail(patientEmail);
+    public ResponseEntity<List<AppointmentRequestDto>> getAppointmentByPatientEmail(@PathVariable String patientEmail) throws Exception {
+        List<AppointmentRequestDto> appointment = this.appointmentService.findByPatientEmail(patientEmail);
 
         return ResponseEntity.ok(appointment);
 
