@@ -1,29 +1,18 @@
-package com.doctor.entities;
+package com.doctor.requestDto;
 
-import com.doctor.ENUM.Country;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "hospital_address")
-@Entity
-public class HospitalAddress {
+public class HospitalAddressRequestDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
-    private Long hospitalAddressId;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Country country;
+    private String country;
 
     @Column(nullable = false)
     @Size(min = 2, max = 50, message = "State name must contain min 2 and max 50 characters")
@@ -39,5 +28,6 @@ public class HospitalAddress {
 
     @Column(name = "zip_code", nullable = false, length = 6)
     private String zipCode;
+
 
 }
