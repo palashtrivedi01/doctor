@@ -3,6 +3,7 @@ package com.doctor.restcontrollers;
 import com.doctor.entities.Appointment;
 //import com.doctor.payloads.FileResponseMessage;
 import com.doctor.exception.BusinessException;
+import com.doctor.exception.ControllerException;
 import com.doctor.payloads.ImageResponse;
 import com.doctor.repositories.IAppointmentRepository;
 import com.doctor.requestDto.AppointmentRequestDto;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -137,6 +139,21 @@ public class AppointmentRestController {
     public ResponseEntity<List<AppointmentRequestDto>> getAllAppointments() throws BusinessException {
         return new ResponseEntity<>(this.iAppointmentService.getAllAppointments(), HttpStatus.OK);
     }
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+//    @PostMapping("/saveAppointment")
+//    public AppointmentRequestDto saveAppointment(@ModelAttribute AppointmentRequestDto appointmentRequestDto,
+//                                                  MultipartFile file) {
+//        System.out.println("SPBL : "+ file.getOriginalFilename());
+//        String fileAttech = iFileService.storeFile(file);
+//
+//        if (ObjectUtils.isEmpty(fileAttech)) {
+//            throw new ControllerException("file is empty");
+//        }
+//        appointmentRequestDto.setFile(fileAttech);
+//        return iAppointmentService.saveAppointment(appointmentRequestDto);
+//    }
 
 
 

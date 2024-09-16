@@ -92,13 +92,32 @@ public class AppointmentServiceImpl implements IAppointmentService {
     @Override
     public List<AppointmentRequestDto> getAllAppointments() throws BusinessException {
        List<Appointment> appointments = this.iAppointmentRepository.findAll();
-     List<AppointmentRequestDto> appointmentRequestDtos = appointments.stream()
-             .map((appointments1 -> modelMapper.map(appointments1, AppointmentRequestDto.class))).toList();
+//     List<AppointmentRequestDto> appointmentRequestDtos = appointments.stream()
+//             .map((appointments1 -> modelMapper.map(appointments1, AppointmentRequestDto.class))).toList();
 
-     if(appointmentRequestDtos.isEmpty())
+        List<AppointmentRequestDto> appointmentRequestDtoList = appointments.stream().map(appointment -> {
+            AppointmentRequestDto appointmentRequestDto = new AppointmentRequestDto();
+
+            appointmentRequestDto.setDoctorEmail(appointment.getDoctorEmail());
+            appointmentRequestDto.setDoctorName(appointment.getDoctorName());
+
+            appointmentRequestDto.setPatientEmail(appointment.getPatientEmail());
+            appointmentRequestDto.setPatientName(appointment.getPatientName());
+            appointmentRequestDto.setPatientMobileNo(appointment.getPatientMobileNo());
+
+
+            appointmentRequestDto.setAppointmentDate(appointment.getAppointmentDate());
+            appointmentRequestDto.setTime(appointment.getTime());
+            appointmentRequestDto.setFile(appointment.getFile());
+            return appointmentRequestDto;
+
+        }).toList();
+
+
+     if(appointmentRequestDtoList.isEmpty())
          throw new BusinessException("NO APPOINTMENT FOUND");
      else
-         return appointmentRequestDtos;
+         return appointmentRequestDtoList;
 
     }
 }

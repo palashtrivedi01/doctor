@@ -28,19 +28,34 @@ public class HospitalAddressRestController {
         return ResponseEntity.ok(this.iHospitalAddressService.updateHospitalByHospitalId(hospitalId, hospitalAddressRequestDto));
     }
 
-    @GetMapping("/getHospitalAddressById/{hospitalId}")
-    public ResponseEntity<HospitalAddressRequestDto> getHospitalAddressById(@PathVariable Long hospitalId) throws BusinessException {
-        return ResponseEntity.ok(this.iHospitalAddressService.getHospitalAddressById(hospitalId));
-    }
-
     @DeleteMapping("/deleteHospitalAddressByHospitalId/{hospitalId}")
     public ResponseEntity<String> deleteHospitalAddressByHospitalId(@PathVariable Long hospitalId) throws BusinessException {
         return new ResponseEntity<>(this.iHospitalAddressService.deleteHospitalAddressByHospitalId(hospitalId), HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/getHospitalAddressById/{hospitalId}")
+    public ResponseEntity<HospitalAddressRequestDto> getHospitalAddressById(@PathVariable Long hospitalId) throws BusinessException {
+        return ResponseEntity.ok(this.iHospitalAddressService.getHospitalAddressById(hospitalId));
+    }
+
     @GetMapping("/getAllHospitalAddresses")
     public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddresses() {
         return ResponseEntity.ok(this.iHospitalAddressService.getAllHospitalAddresses());
+    }
+
+    @GetMapping("/getAllHospitalAddressesByCity/{city}")
+    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByCity(@PathVariable String city) throws BusinessException {
+        return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByCity(city), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllHospitalAddressesByCountry")
+    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByCountry(String country) throws BusinessException {
+        return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByCountry(country), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllHospitalAddressesByState")
+    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByState(String state) throws BusinessException {
+        return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByState(state), HttpStatus.OK);
     }
 
 }

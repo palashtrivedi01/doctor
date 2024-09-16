@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -153,14 +154,34 @@ public class DoctorServiceImpl implements IDoctorService {
     @Override
     public List<DoctorRequestDto> getAllDoctors() {
         List<Doctor> doctors = this.iDoctorRepository.findAll();
-        List<DoctorRequestDto> doctorRequestDtos = doctors.stream()
-                                                    .map((doctors1) -> modelMapper.map(doctors1, DoctorRequestDto.class))
-                                                    .collect(Collectors.toList());
+//        List<DoctorRequestDto> doctorRequestDtos = doctors.stream()
+//                                                    .map((doctors1) -> modelMapper.map(doctors1, DoctorRequestDto.class))
+//                                                    .collect(Collectors.toList());
+        List<DoctorRequestDto> doctorRequestDtos = doctors.stream().map(doctor -> {
+            DoctorRequestDto updatedDoctorRequestDto = new DoctorRequestDto();
+
+            updatedDoctorRequestDto.setRole(doctor.getRole());
+
+            updatedDoctorRequestDto.setDoctorEmail(doctor.getDoctorEmail());
+            updatedDoctorRequestDto.setDoctorName(doctor.getDoctorName());
+            updatedDoctorRequestDto.setDoctorMobileNumber(doctor.getDoctorMobileNumber());
+            updatedDoctorRequestDto.setDoctorPassword(doctor.getDoctorPassword());
+            updatedDoctorRequestDto.setDoctorGender(String.valueOf(doctor.getDoctorGender()));
+            updatedDoctorRequestDto.setDoctorSpecialization(doctor.getDoctorSpecialization());
+
+            updatedDoctorRequestDto.setHospitalName(doctor.getHospitalName());
+            updatedDoctorRequestDto.setRegisterDate(doctor.getRegisterDate());
+
+            updatedDoctorRequestDto.setResetPasswordToken(doctor.getResetPasswordToken());
+            updatedDoctorRequestDto.setUpdateDate(doctor.getUpdateDate());
+
+            return updatedDoctorRequestDto;
+
+        }).toList();
 
         if(doctorRequestDtos.isEmpty())
             throw new ControllerException(" NO DOCTOR FOUND ");
-        else
-            return doctorRequestDtos;
+        return doctorRequestDtos;
     }
 
 
@@ -172,8 +193,25 @@ public class DoctorServiceImpl implements IDoctorService {
         else {
             Doctor existingDoctor = this.iDoctorRepository.findByDoctorEmail(doctorEmail);
             if (existingDoctor != null) {
-                DoctorRequestDto doctorRequestDto = modelMapper.map(existingDoctor, DoctorRequestDto.class);
-                return doctorRequestDto;
+//                DoctorRequestDto doctorRequestDto = modelMapper.map(existingDoctor, DoctorRequestDto.class);
+//                return doctorRequestDto;
+                DoctorRequestDto existingDoctorRequestDto = new DoctorRequestDto();
+                existingDoctorRequestDto.setRole(existingDoctor.getRole());
+
+                existingDoctorRequestDto.setDoctorEmail(existingDoctor.getDoctorEmail());
+                existingDoctorRequestDto.setDoctorName(existingDoctor.getDoctorName());
+                existingDoctorRequestDto.setDoctorMobileNumber(existingDoctor.getDoctorMobileNumber());
+                existingDoctorRequestDto.setDoctorPassword(existingDoctor.getDoctorPassword());
+                existingDoctorRequestDto.setDoctorGender(String.valueOf(existingDoctor.getDoctorGender()));
+                existingDoctorRequestDto.setDoctorSpecialization(existingDoctor.getDoctorSpecialization());
+
+                existingDoctorRequestDto.setHospitalName(existingDoctor.getHospitalName());
+                existingDoctorRequestDto.setRegisterDate(existingDoctor.getRegisterDate());
+
+                existingDoctorRequestDto.setResetPasswordToken(existingDoctor.getResetPasswordToken());
+                existingDoctorRequestDto.setUpdateDate(existingDoctor.getUpdateDate());
+
+                return existingDoctorRequestDto;
             } else
                 throw new ControllerException("DOCTOR NOT FOUND WITH GIVEN EMAIL : " + doctorEmail);
         }
@@ -188,11 +226,30 @@ public class DoctorServiceImpl implements IDoctorService {
         if(optionalDoctor.isPresent()){
             List<Appointment> listOfAppointments = this.iAppointmentRepository.findByDoctorEmail(doctorEmail);
 
-            List<AppointmentRequestDto> appointmentRequestDtoList = listOfAppointments.stream()
-                    .map((appointment -> modelMapper.map(appointment, AppointmentRequestDto.class)))
-                    .collect(Collectors.toList());
+//            List<AppointmentRequestDto> appointmentRequestDtoList = listOfAppointments.stream()
+//                    .map((appointment -> modelMapper.map(appointment, AppointmentRequestDto.class)))
+//                    .collect(Collectors.toList());
 
-            return appointmentRequestDtoList;
+            List<AppointmentRequestDto> appointmentRequestDtos = listOfAppointments.stream().map(appointment -> {
+                AppointmentRequestDto appointmentRequestDto = new AppointmentRequestDto();
+
+                appointmentRequestDto.setDoctorEmail(appointment.getDoctorEmail());
+                appointmentRequestDto.setDoctorName(appointment.getDoctorName());
+
+                appointmentRequestDto.setAppointmentDate(appointment.getAppointmentDate());
+
+                appointmentRequestDto.setPatientName(appointment.getPatientName());
+                appointmentRequestDto.setPatientEmail(appointment.getPatientEmail());
+                appointmentRequestDto.setPatientMobileNo(appointment.getPatientMobileNo());
+
+                appointmentRequestDto.setFile(appointment.getFile());
+                appointmentRequestDto.setDoctorName(appointment.getDoctorName());
+
+                appointmentRequestDto.setTime(appointment.getTime());
+                return appointmentRequestDto;
+            }).toList();
+
+            return appointmentRequestDtos;
         }
         else
             throw new ControllerException("DOCTOR NOT EXISTS WITH GIVEN EMAIL : " + doctorEmail + " ANYMORE! ");

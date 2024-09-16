@@ -17,4 +17,10 @@ public interface IHospitalAddressService {
     String deleteHospitalAddressByHospitalId(Long hospitalId) throws BusinessException;
 
     List<HospitalAddressRequestDto> getAllHospitalAddresses();
+
+    List<HospitalAddressRequestDto> getAllHospitalAddressesByCity(String city) throws BusinessException;
+
+    List<HospitalAddressRequestDto> getAllHospitalAddressesByCountry(String country) throws BusinessException;
+
+    List<HospitalAddressRequestDto> getAllHospitalAddressesByState(String state) throws BusinessException;
 }

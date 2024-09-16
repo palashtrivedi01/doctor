@@ -6,6 +6,7 @@ import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
 import com.doctor.payloads.InputValidator;
 import com.doctor.repositories.IHospitalRepository;
+import com.doctor.requestDto.AppointmentRequestDto;
 import com.doctor.requestDto.HospitalAddressRequestDto;
 import com.doctor.services.IHospitalAddressService;
 import jakarta.validation.Valid;
@@ -146,12 +147,87 @@ public class HospitalAddressServiceImpl implements IHospitalAddressService {
             throw new ControllerException("NO HOSPITAL ADDRESSES FOUND");
         else
         {
-            List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream()
-                    .map(address -> modelMapper.map(address, HospitalAddressRequestDto.class)).toList();
+//            List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream()
+//                    .map(address -> modelMapper.map(address, HospitalAddressRequestDto.class)).toList();
+            List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream().map(hospitalAddressByState -> {
+                HospitalAddressRequestDto hospitalAddressRequestDto = new HospitalAddressRequestDto();
+                hospitalAddressRequestDto.setAddressName(hospitalAddressByState.getAddressName());
+                hospitalAddressRequestDto.setCity(hospitalAddressByState.getCity());
+                hospitalAddressRequestDto.setState(hospitalAddressByState.getState());
+                hospitalAddressRequestDto.setZipCode(hospitalAddressByState.getZipCode());
+                hospitalAddressRequestDto.setCountry(String.valueOf(hospitalAddressByState.getCountry()));
+                return hospitalAddressRequestDto;
+            }).toList();
+
             return hospitalAddressRequestDtoList;
         }
     }
 
+    @Override
+    public List<HospitalAddressRequestDto> getAllHospitalAddressesByCity(String city) throws BusinessException {
+
+        if(InputValidator.isNumeric(city))
+            throw new BusinessException("Number cannot be passed as City");
+
+        List<HospitalAddress> hospitalAddressList = this.iHospitalRepository.findHospitalAddressByCity(city);
+       if(hospitalAddressList.isEmpty())
+           throw new BusinessException("NO HOSPITAL ADDRESSES FOUND BY CITY : " + city);
+       else {
+           return hospitalAddressList.stream().map(hospitalAddressByState -> {
+                HospitalAddressRequestDto hospitalAddressRequestDto = new HospitalAddressRequestDto();
+                hospitalAddressRequestDto.setAddressName(hospitalAddressByState.getAddressName());
+                hospitalAddressRequestDto.setCity(hospitalAddressByState.getCity());
+                hospitalAddressRequestDto.setState(hospitalAddressByState.getState());
+                hospitalAddressRequestDto.setZipCode(hospitalAddressByState.getZipCode());
+                hospitalAddressRequestDto.setCountry(String.valueOf(hospitalAddressByState.getCountry()));
+                return hospitalAddressRequestDto;
+            }).toList();
+       }
+    }
+
+    @Override
+    public List<HospitalAddressRequestDto> getAllHospitalAddressesByCountry(String country) throws BusinessException {
+        if(InputValidator.isNumeric(country))
+            throw new BusinessException("Number cannot be passed as Country");
+
+        try{
+            Country countriesList = Country.valueOf(country.toUpperCase());
+        }
+        catch (ControllerException controllerException){
+            throw new ControllerException("Invalid Country : " + country);
+        }
+
+        List<HospitalAddress> hospitalAddresses = this.iHospitalRepository.findHospitalAddressByCountry(country);
+        if(hospitalAddresses.isEmpty())
+            throw new BusinessException("NO HOSPITAL ADDRESSES FOUND BY COUNTRY : " + country);
+        else {
+            return hospitalAddresses.stream()
+                    .map(hospitalByCountry -> modelMapper.map(hospitalByCountry, HospitalAddressRequestDto.class)).toList();
+        }
+    }
+
+    @Override
+    public List<HospitalAddressRequestDto> getAllHospitalAddressesByState(String state) throws BusinessException {
+        if(InputValidator.isNumeric(state))
+            throw new BusinessException("Number cannot be passed as State");
+
+        List<HospitalAddress> hospitalAddressList = this.iHospitalRepository.findHospitalAddressByState(state);
+        if(hospitalAddressList.isEmpty())
+            throw new BusinessException("NO HOSPITAL ADDRESSES FOUND BY STATE : " + state);
+        else {
+//            return hospitalAddressList.stream()
+//                    .map(hospitalAddressByState -> modelMapper.map(hospitalAddressByState, HospitalAddressRequestDto.class)).toList();
+            return hospitalAddressList.stream().map(hospitalAddressByState -> {
+                HospitalAddressRequestDto hospitalAddressRequestDto = new HospitalAddressRequestDto();
+                hospitalAddressRequestDto.setAddressName(hospitalAddressByState.getAddressName());
+                hospitalAddressRequestDto.setCity(hospitalAddressByState.getCity());
+                hospitalAddressRequestDto.setState(hospitalAddressByState.getState());
+                hospitalAddressRequestDto.setZipCode(hospitalAddressByState.getZipCode());
+                hospitalAddressRequestDto.setCountry(String.valueOf(hospitalAddressByState.getCountry()));
+                return hospitalAddressRequestDto;
+            }).toList();
+        }
+    }
 
 
 }
