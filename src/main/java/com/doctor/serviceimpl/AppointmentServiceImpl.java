@@ -1,14 +1,15 @@
 package com.doctor.serviceimpl;
 
 import com.doctor.entity.Appointment;
+
 import com.doctor.exception.InvalidInputException;
 import com.doctor.repository.AppointmentRepo;
 import com.doctor.requestdto.AppointmentRequestDto;
 import com.doctor.services.AppointmentService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         a.setPatientName(appointmentRequestDto.getPatientName());
         a.setPatientEmail(appointmentRequestDto.getPatientEmail());
         a.setTime(appointmentRequestDto.getTime());
-        //BeanUtils.copyProperties(appointmentRequestDto, a);
         appointmentRepo.save(a);
         return appointmentRequestDto;
     }
@@ -54,4 +54,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         }).toList();
         return list;
     }
+
+    @Override
+    public AppointmentRequestDto getAppointment(Long appointmentId) throws FileNotFoundException {
+        Optional<Appointment> byId = appointmentRepo.findById(appointmentId);
+        if (byId.isPresent()) {
+            AppointmentRequestDto dto= new AppointmentRequestDto();
+            dto.setAppointmentId(appointmentId);
+            dto.setFile(byId.get().getFile());
+            dto.setDoctorName(byId.get().getDoctorName());
+            dto.setPatientName(byId.get().getPatientName());
+            dto.setPatientEmail(byId.get().getPatientEmail());
+            dto.setTime(byId.get().getTime());
+            return dto;
+
+        }
+        throw new FileNotFoundException("file not found with given id: " + appointmentId);
+    }
+
 }

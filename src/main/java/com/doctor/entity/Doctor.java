@@ -3,10 +3,8 @@ package com.doctor.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-
 import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Data
@@ -16,6 +14,7 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doctorId;
     private String role;
+    @Column(unique = true)
     private String doctorEmail;
     private String doctorGender;
     private Long doctorMobileNumber;

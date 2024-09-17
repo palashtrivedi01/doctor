@@ -14,12 +14,12 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
     private String file;
-    private Date appointmentDate;
+    private String appointmentDate;
     private String doctorEmail;
     private String doctorName;
     private String patientEmail;
     private String patientName;
-    private Timestamp time;
+    private String time;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "doctorId")

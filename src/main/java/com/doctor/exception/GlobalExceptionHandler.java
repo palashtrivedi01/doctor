@@ -16,12 +16,31 @@ public class GlobalExceptionHandler {
 
     }
 
-
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<APIResponseMessage> handleInvalidInputException(BusinessException exception) {
         APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
     }
+
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<APIResponseMessage> handleNotFoundException(NotFoundException exception) {
+        APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.NOT_FOUND).build();
+        return new ResponseEntity<>(x, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(FileStorageException.class)
+    public ResponseEntity<APIResponseMessage> handleFileStorageException(FileStorageException exception) {
+        APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
+        return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmptyInputException.class)
+    public ResponseEntity<APIResponseMessage> handleEmptyInputException(EmptyInputException exception) {
+        APIResponseMessage x = APIResponseMessage.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST).build();
+        return new ResponseEntity<>(x, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<APIResponseMessage> handleException(Exception exception) {
