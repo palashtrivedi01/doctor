@@ -16,7 +16,7 @@ public class InputValidator {
         }
 
 
-    /*public static boolean isInteger(String input) {
+    public static boolean isInteger(String input) {
         if (input == null || input.trim().isEmpty()) {
             return false;
         }
@@ -31,6 +31,6 @@ public class InputValidator {
         } catch (NumberFormatException e) {
             return false;
         }
-    }*/
+    }
 
 }

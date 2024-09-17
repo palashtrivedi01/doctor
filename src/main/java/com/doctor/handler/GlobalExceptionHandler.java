@@ -4,6 +4,7 @@ import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
 import com.doctor.payloads.ApiResponseMessage;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +82,16 @@ public class GlobalExceptionHandler {
             response.put(field, message);
         });
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponseMessage> dataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException){
+
+        ApiResponseMessage message = ApiResponseMessage.builder()
+                .message(dataIntegrityViolationException.getMessage())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
 

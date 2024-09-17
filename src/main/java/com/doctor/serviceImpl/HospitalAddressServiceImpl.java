@@ -190,12 +190,16 @@ public class HospitalAddressServiceImpl implements IHospitalAddressService {
         if(InputValidator.isNumeric(country))
             throw new BusinessException("Number cannot be passed as Country");
 
-        try{
-            Country countriesList = Country.valueOf(country.toUpperCase());
-        }
-        catch (ControllerException controllerException){
-            throw new ControllerException("Invalid Country : " + country);
-        }
+//        try{
+            Country countriesList = Country.valueOf(String.valueOf(country.toUpperCase()));
+//        }
+//        catch (ControllerException controllerException){
+//            throw new ControllerException("Invalid Country : " + country);
+//        }
+        Country country1 = Arrays.stream(Country.values())
+                .filter(countryName -> countryName.name().trim().equalsIgnoreCase(country))
+                .findFirst()
+                .orElse(null);
 
         List<HospitalAddress> hospitalAddresses = this.iHospitalRepository.findHospitalAddressByCountry(country);
         if(hospitalAddresses.isEmpty())
