@@ -108,7 +108,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
             appointmentRequestDto.setAppointmentDate(appointment.getAppointmentDate());
             appointmentRequestDto.setTime(appointment.getTime());
-            appointmentRequestDto.setFile(appointment.getFile());
+            appointmentRequestDto.setFileAttach(appointment.getFileAttach());
             return appointmentRequestDto;
 
         }).toList();

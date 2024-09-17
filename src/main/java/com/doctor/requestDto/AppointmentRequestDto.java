@@ -20,7 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 public class AppointmentRequestDto {
 
-    private String file;
+//    private String file;
+
+    private String fileAttach;
 
     private Date appointmentDate;
 
@@ -41,8 +43,10 @@ public class AppointmentRequestDto {
     @Pattern(regexp = "[6789][0-9]{9}", message = "Enter valid mobile number")
     private String patientMobileNo;
 
-    @CreationTimestamp
-    private Timestamp time;
+//    @CreationTimestamp
+//    private Timestamp time;
+
+    private String time;
 
 
 //    private Doctor doctors;

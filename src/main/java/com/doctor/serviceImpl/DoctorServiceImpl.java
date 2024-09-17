@@ -242,7 +242,7 @@ public class DoctorServiceImpl implements IDoctorService {
                 appointmentRequestDto.setPatientEmail(appointment.getPatientEmail());
                 appointmentRequestDto.setPatientMobileNo(appointment.getPatientMobileNo());
 
-                appointmentRequestDto.setFile(appointment.getFile());
+                appointmentRequestDto.setFileAttach(appointment.getFileAttach());
                 appointmentRequestDto.setDoctorName(appointment.getDoctorName());
 
                 appointmentRequestDto.setTime(appointment.getTime());

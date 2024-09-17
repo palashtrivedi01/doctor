@@ -25,7 +25,9 @@ public class Appointment {
     @Column(name = "appointment_id")
     private Long appointmentId;
 
-    private String file;
+//    private String file;
+
+    private String fileAttach;
 
     @Column(name = "appointment_date", nullable = false)
     private Date appointmentDate;
@@ -45,8 +47,10 @@ public class Appointment {
     @Column(name = "patient_mobile_no", nullable = false)
     private String patientMobileNo;
 
-    @CreationTimestamp
-    private Timestamp time;
+//    @CreationTimestamp
+//    private Timestamp time;
+
+    private String time;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor_id")
