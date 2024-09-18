@@ -38,17 +38,26 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public AppointmentRequestDto findByEmail(String byPatientEmail) {
-        Optional<Appointment> optionalAppointment = Optional.ofNullable(this.iAppointmentRepository.findByPatientEmail(byPatientEmail));
-        if (optionalAppointment.isPresent()) {
-            Appointment appointment = optionalAppointment.get();
+    public List<AppointmentRequestDto> findByEmail(String byPatientEmail) {
+        List<Appointment> appointmentList = this.iAppointmentRepository.findByPatientEmail(byPatientEmail);
 
+        return appointmentList.stream().map(appointment -> {
             AppointmentRequestDto appointmentRequestDto = new AppointmentRequestDto();
-            BeanUtils.copyProperties(appointment, appointmentRequestDto);
+
+            appointmentRequestDto.setFileAttach(appointment.getFileAttach());
+            appointmentRequestDto.setAppointmentDate(appointment.getAppointmentDate());
+            appointmentRequestDto.setTime(appointment.getTime());
+
+            appointmentRequestDto.setDoctorName(appointment.getDoctorName());
+            appointmentRequestDto.setDoctorEmail(appointment.getDoctorEmail());
+
+            appointmentRequestDto.setPatientName(appointment.getPatientName());
+            appointmentRequestDto.setPatientEmail(appointment.getPatientEmail());
+            appointmentRequestDto.setPatientMobileNo(appointment.getPatientMobileNo());
 
             return appointmentRequestDto;
-        } else
-            throw new ControllerException("NO DATA FOUND WITH GIVEN EMAIL");
+        }).toList();
+
     }
 
     @Override

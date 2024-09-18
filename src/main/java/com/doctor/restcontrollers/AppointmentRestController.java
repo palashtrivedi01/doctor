@@ -49,7 +49,7 @@ public class AppointmentRestController {
 //    }
 
     @GetMapping("/getAppointment/{byPatientEmail}")
-    public ResponseEntity<AppointmentRequestDto> getAppointmentByPatientEmail(@PathVariable String byPatientEmail) {
+    public ResponseEntity<List<AppointmentRequestDto>> getAppointmentByPatientEmail(@PathVariable String byPatientEmail) {
         return new ResponseEntity<>(this.iAppointmentService.findByEmail(byPatientEmail), HttpStatus.OK);
     }
 

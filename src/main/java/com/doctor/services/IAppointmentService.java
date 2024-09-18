@@ -10,7 +10,7 @@ public interface IAppointmentService {
 
     AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto);
 
-    AppointmentRequestDto findByEmail(String byPatientEmail);
+    List<AppointmentRequestDto> findByEmail(String byPatientEmail);
 
     AppointmentRequestDto updateAppointment(Long appointmentId, AppointmentRequestDto appointmentRequestDto) throws BusinessException;
 
