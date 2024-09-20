@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -23,21 +24,6 @@ public class UserRestController {
 
     @Autowired
     private IUserService iUserService;
-
-    @GetMapping("/me")
-    public ResponseEntity<Users> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users currentUser = (Users) authentication.getPrincipal();
-        return ResponseEntity.ok(currentUser);
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<List<Users>> allUsers() {
-        List <Users> users = iUserService.allUsers();
-        return ResponseEntity.ok(users);
-    }
-
-//*******************************************************************************
 
     @PostMapping("/saveUser")
     public ResponseEntity<UserResponseDto> saveUser(@Valid @RequestBody UserRequestDto userRequestDto){
@@ -62,6 +48,22 @@ public class UserRestController {
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         return ResponseEntity.ok(this.iUserService.getAllUsers());
+    }
+
+
+//*******************************************************************************
+
+    @GetMapping("/me")
+    public ResponseEntity<Users> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Users currentUser = (Users) authentication.getPrincipal();
+        return ResponseEntity.ok(currentUser);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Users>> allUsers() {
+        List <Users> users = iUserService.allUsers();
+        return ResponseEntity.ok(users);
     }
 
 

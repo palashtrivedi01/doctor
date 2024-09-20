@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-        import org.springframework.util.ObjectUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v3/hms/appointment")
+@EnableWebSecurity
 public class AppointmentRestController {
 
     @Autowired
@@ -70,6 +73,7 @@ public class AppointmentRestController {
     }
 
     @GetMapping("/getAllAppointments")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AppointmentRequestDto>> getAllAppointments() throws BusinessException {
         return new ResponseEntity<>(this.iAppointmentService.getAllAppointments(), HttpStatus.OK);
     }

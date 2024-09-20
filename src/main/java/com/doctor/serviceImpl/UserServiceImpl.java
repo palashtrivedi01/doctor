@@ -1,5 +1,6 @@
 package com.doctor.serviceImpl;
 
+import com.doctor.ENUM.Role;
 import com.doctor.entities.Users;
 import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
@@ -43,6 +44,10 @@ public class UserServiceImpl implements IUserService {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(new BCryptPasswordEncoder().encode(userRequestDto.getPassword()));
         user.setMobile(userRequestDto.getMobile());
+//        user.setRole(Role.valueOf(userRequestDto.getRole()));
+
+        user.setRole(userRequestDto.getRole());
+        user.setName(userRequestDto.getName());
 
         Users savedUser = userRepository.save(user);
 
@@ -50,6 +55,8 @@ public class UserServiceImpl implements IUserService {
         userResponseDto.setEmail(savedUser.getEmail());
         userResponseDto.setPassword(userRequestDto.getPassword());
         userResponseDto.setMobile(savedUser.getMobile());
+        userResponseDto.setRole(savedUser.getRole().toString());
+
 
         return userResponseDto;
 
@@ -65,6 +72,8 @@ public class UserServiceImpl implements IUserService {
         user.setEmail(userRequestDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userRequestDto.getPassword()));
         user.setMobile(userRequestDto.getMobile());
+//        user.setRole(Role.valueOf(userRequestDto.getRole()));
+        user.setRole(userRequestDto.getRole());
 
             Users updatedUser = userRepository.save(user);
 
@@ -72,8 +81,13 @@ public class UserServiceImpl implements IUserService {
             userResponseDto.setEmail(updatedUser.getEmail());
             userResponseDto.setPassword(userRequestDto.getPassword());
             userResponseDto.setMobile(updatedUser.getMobile());
+            userResponseDto.setRole(updatedUser.getRole().toString());
 
-            return "User successfully updated, check updated user details : " + "\n" + "Updated email : " + userResponseDto.getEmail() + "\n" + "Updated password : " + userResponseDto.getPassword() + "\n" + "Updated mobile number : " + userResponseDto.getMobile();
+            return "User successfully updated, check updated user details : " + "\n"
+                    + "Updated email : " + userResponseDto.getEmail() + "\n"
+                    + "Updated password : " + userResponseDto.getPassword() + "\n"
+                    + "Updated mobile number : " + userResponseDto.getMobile() + "\n"
+                    + "Updated role : " + userResponseDto.getRole();
 
     }
 
@@ -98,7 +112,7 @@ public class UserServiceImpl implements IUserService {
        UserResponseDto userResponseDto = new UserResponseDto();
        userResponseDto.setEmail(user.getEmail());
        userResponseDto.setMobile(user.getMobile());
-
+       userResponseDto.setRole(user.getRole().toString());
         return userResponseDto;
     }
 
@@ -113,6 +127,7 @@ public class UserServiceImpl implements IUserService {
             userResponseDto.setEmail(usersInList.getEmail());
             userResponseDto.setPassword("Password is hidden due to security reasons!");
             userResponseDto.setMobile(usersInList.getMobile());
+            userResponseDto.setRole(String.valueOf(usersInList.getRole()));
 
             return userResponseDto;
 

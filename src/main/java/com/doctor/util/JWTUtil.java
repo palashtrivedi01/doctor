@@ -39,6 +39,7 @@ public class JWTUtil {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        System.out.println("AUTHORITY : " + userDetails.getAuthorities());
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 

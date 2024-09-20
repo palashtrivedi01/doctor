@@ -6,9 +6,9 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -25,6 +25,8 @@ public class Users implements UserDetails {
     @Column(name = "user_id")
     private Long userId;
 
+    private String name;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -34,10 +36,14 @@ public class Users implements UserDetails {
     @Column(unique = true, nullable = false)
     private String mobile;
 
-//    private String role;
+    private String role;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+//    @Enumerated(EnumType.STRING)
+//    private Role role;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
+
 
 //    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id")
@@ -57,7 +63,7 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override

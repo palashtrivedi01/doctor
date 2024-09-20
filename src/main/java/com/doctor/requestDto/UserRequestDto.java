@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class UserRequestDto {
 
+    private String name;
+
     @Column(unique = true, nullable = false)
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
             message = "Email is mandatory and  must follow the pattern: abc@abc.com")

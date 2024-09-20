@@ -8,6 +8,8 @@ import com.doctor.responseDto.LoginResponse;
 import com.doctor.security.AuthenticationService;
 import com.doctor.services.IUserService;
 import com.doctor.util.JWTUtil;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthRestController {
 
     @Autowired
@@ -47,16 +50,17 @@ public class AuthRestController {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtUtil.getExpirationTime());
-
+        log.info("Successful login");
         return ResponseEntity.ok(loginResponse);
     }
 
     @GetMapping("/me")
     public ResponseEntity<User> authenticatedUser() {
+        System.out.println("A");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
+        System.out.println("B");
         User currentUser = (User) authentication.getPrincipal();
-
+        System.out.println("ROLE : " + currentUser.getAuthorities());
         return ResponseEntity.ok(currentUser);
     }
 

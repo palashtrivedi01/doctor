@@ -1,5 +1,6 @@
 package com.doctor.configuration;
 
+import com.doctor.ENUM.Role;
 import com.doctor.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -55,8 +56,10 @@ public class SecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers("/auth/**", "/api/v3/hms/user/saveUser").permitAll()
+//                .requestMatchers("/doctor/**").hasAuthority("ROLE_ADMIN")
+//                .requestMatchers("/doctor/**").hasRole("ADMIN")
+//                .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

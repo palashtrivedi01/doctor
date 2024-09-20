@@ -48,13 +48,13 @@ public class HospitalAddressRestController {
         return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByCity(city), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllHospitalAddressesByCountry")
-    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByCountry(String country) throws BusinessException {
+    @GetMapping("/getAllHospitalAddressesByCountry/{country}")
+    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByCountry(@PathVariable String country) throws BusinessException {
         return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByCountry(country), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllHospitalAddressesByState")
-    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByState(String state) throws BusinessException {
+    @GetMapping("/getAllHospitalAddressesByState/{state}")
+    public ResponseEntity<List<HospitalAddressRequestDto>> getAllHospitalAddressesByState(@PathVariable String state) throws BusinessException {
         return new ResponseEntity<>(this.iHospitalAddressService.getAllHospitalAddressesByState(state), HttpStatus.OK);
     }
 
