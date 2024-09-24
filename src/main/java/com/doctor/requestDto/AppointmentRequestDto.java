@@ -18,6 +18,7 @@ import java.util.List;
 @Data //Getter Setter ToString EqualsAndHashcode RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AppointmentRequestDto {
 
 //    private String file;

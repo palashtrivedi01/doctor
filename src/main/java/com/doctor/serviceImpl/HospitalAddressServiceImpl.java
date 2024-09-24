@@ -35,13 +35,13 @@ public class HospitalAddressServiceImpl implements IHospitalAddressService {
     public HospitalAddressRequestDto saveHospitalAddress(HospitalAddressRequestDto hospitalAddressRequestDto) {
        HospitalAddress hospitalAddress = new HospitalAddress();
 
-        System.out.println(hospitalAddressRequestDto.getCountry());
+//        System.out.println(hospitalAddressRequestDto.getCountry());
 
         Country country = Arrays.stream(Country.values())
                                 .filter(countryName -> countryName.name().trim().equalsIgnoreCase(hospitalAddressRequestDto.getCountry()))
                                 .findFirst()
                                 .orElse(null);
-
+        System.out.println(country);
         if(country != null) {
             hospitalAddress.setCountry(country);
             hospitalAddress.setAddressName(hospitalAddressRequestDto.getAddressName().trim());

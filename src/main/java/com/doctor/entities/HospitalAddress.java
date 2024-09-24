@@ -3,10 +3,7 @@ package com.doctor.entities;
 import com.doctor.ENUM.Country;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -14,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "hospital_address")
 @Entity
+@Builder
 public class HospitalAddress {
 
     @Id
