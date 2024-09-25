@@ -21,9 +21,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto) {
+        System.out.println(appointmentRequestDto);
         Appointment a = new Appointment();
         a.setDoctorName(appointmentRequestDto.getDoctorName());
-        a.setFile(appointmentRequestDto.getFile());
+        a.setFileAttach(appointmentRequestDto.getFileAttach());
         a.setAppointmentDate(appointmentRequestDto.getAppointmentDate());
         a.setDoctorEmail(appointmentRequestDto.getDoctorEmail());
         a.setPatientName(appointmentRequestDto.getPatientName());
@@ -44,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<AppointmentRequestDto> list = optionalAppointment.stream().map(appointment -> {
             AppointmentRequestDto dto = new AppointmentRequestDto();
             dto.setDoctorName(appointment.getDoctorName());
-            dto.setFile(appointment.getFile());
+            dto.setFileAttach(appointment.getFileAttach());
             dto.setAppointmentDate(appointment.getAppointmentDate());
             dto.setDoctorEmail(appointment.getDoctorEmail());
             dto.setPatientName(appointment.getPatientName());
@@ -61,7 +62,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (byId.isPresent()) {
             AppointmentRequestDto dto= new AppointmentRequestDto();
             dto.setAppointmentId(appointmentId);
-            dto.setFile(byId.get().getFile());
+            dto.setFileAttach(byId.get().getFileAttach());
             dto.setDoctorName(byId.get().getDoctorName());
             dto.setPatientName(byId.get().getPatientName());
             dto.setPatientEmail(byId.get().getPatientEmail());

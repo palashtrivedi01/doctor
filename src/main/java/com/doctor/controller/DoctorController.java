@@ -41,7 +41,6 @@ public class DoctorController {
     public ResponseEntity<DoctorRequestDto> getDoctorByDoctorEmail(@PathVariable String doctorEmail) throws ControllerException {
         DoctorRequestDto byDoctorEmail = doctorService.getDoctorByDoctorEmail(doctorEmail);
         return new ResponseEntity<>(byDoctorEmail, HttpStatus.OK);
-
     }
 
     @GetMapping("doctorId/{doctorId}")

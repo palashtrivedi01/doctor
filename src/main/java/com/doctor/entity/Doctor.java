@@ -22,9 +22,9 @@ public class Doctor {
     private String doctorPassword;
     private String doctorSpecialization;
     private String hospitalName;
-    private Date registerDate;
+    private String registerDate;
     private String resetPasswordToken;
-    private Date updateDate;
+    private String updateDate;
 
     @ManyToOne()
     @JoinColumn(name = "hospitalId")

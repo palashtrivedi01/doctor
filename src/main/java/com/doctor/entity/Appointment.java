@@ -13,7 +13,7 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
-    private String file;
+    private String fileAttach;
     private String appointmentDate;
     private String doctorEmail;
     private String doctorName;

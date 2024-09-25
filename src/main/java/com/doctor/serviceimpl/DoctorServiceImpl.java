@@ -99,6 +99,8 @@ public class DoctorServiceImpl implements DoctorService {
             doctorRequestDto.setDoctorEmail(doctor.getDoctorEmail());
             doctorRequestDto.setRegisterDate(doctor.getRegisterDate());
             doctorRequestDto.setHospitalName(doctor.getHospitalName());
+
+
             doctorRequestDto.setResetPasswordToken(doctor.getResetPasswordToken());
             doctorRequestDto.setRole(doctor.getRole());
             doctorRequestDto.setUpdateDate(doctor.getUpdateDate());
@@ -153,7 +155,7 @@ public class DoctorServiceImpl implements DoctorService {
                 dto.setDoctorEmail(a.getDoctorEmail());
                 dto.setTime(a.getTime());
                 dto.setDoctorEmail(a.getDoctorEmail());
-                dto.setFile(a.getFile());
+                dto.setFileAttach(a.getFileAttach());
                 dto.setAppointmentDate(a.getAppointmentDate());
                 return dto;
             }).toList();

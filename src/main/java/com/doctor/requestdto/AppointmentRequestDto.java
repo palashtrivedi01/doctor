@@ -14,5 +14,5 @@ public class AppointmentRequestDto {
     private String patientEmail;
     private String patientName;
     private String time;
-    private String file;
+    private String fileAttach;
 }

@@ -1,12 +1,16 @@
 package com.doctor.requestdto;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 @Data
 
 public class DoctorRequestDto {
+    private Long doctorId;
     private String role;
     private String doctorEmail;
     private String doctorGender;
@@ -15,7 +19,7 @@ public class DoctorRequestDto {
     private String doctorPassword;
     private String doctorSpecialization;
     private String hospitalName;
-    private Date registerDate;
+    private String registerDate;
     private String resetPasswordToken;
-    private Date updateDate;
+    private String updateDate;
 }

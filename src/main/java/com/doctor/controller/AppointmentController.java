@@ -1,6 +1,5 @@
 package com.doctor.controller;
 
-import com.doctor.entity.Appointment;
 import com.doctor.exception.EmptyInputException;
 import com.doctor.exception.FileStorageException;
 import com.doctor.requestdto.AppointmentRequestDto;
@@ -8,7 +7,6 @@ import com.doctor.services.AppointmentService;
 import com.doctor.services.FileStorageService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -33,12 +31,12 @@ public class AppointmentController {
     public ResponseEntity<AppointmentRequestDto> saveAppointment(@ModelAttribute AppointmentRequestDto appointmentRequestDto,
                                                                  @RequestPart MultipartFile file)
             throws EmptyInputException, FileStorageException {
-
+        System.out.println(appointmentRequestDto);
         String fileAttach = fileStorageService.storeFile(file);
         if (ObjectUtils.isEmpty(fileAttach)) {
             throw new EmptyInputException("file is empty");
         }
-        appointmentRequestDto.setFile(fileAttach);
+        appointmentRequestDto.setFileAttach(fileAttach);
         AppointmentRequestDto appointment1 = this.appointmentService.saveAppointment(appointmentRequestDto);
         return new ResponseEntity<>(appointment1, HttpStatus.OK);
     }
@@ -54,7 +52,7 @@ public class AppointmentController {
         System.out.println("111");
         AppointmentRequestDto appointment = appointmentService.getAppointment(appointmentId);
         System.out.println("3");
-        String fileName= appointment.getFile();
+        String fileName= appointment.getFileAttach();
         InputStream resource= fileStorageService.getResource("image/", fileName);
         StreamUtils.copy(resource, httpServletResponse.getOutputStream());
         System.out.println(appointment);
