@@ -3,9 +3,7 @@ package com.doctor.controller;
 import com.doctor.dto.DoctorRequestDTO;
 import com.doctor.entities.Appointment;
 import com.doctor.entities.Doctor;
-import com.doctor.repository.AppointmentRepository;
-import com.doctor.repository.DoctorRepository;
-import com.doctor.service.HelloDoctorServices;
+import com.doctor.service.serviceimpl.HelloDoctorServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +32,12 @@ public class DoctorController {
     }
 
 
+
+
     //Add Doctor
     @PostMapping("/addDoctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor) {
-        Doctor savedDoctor = doctorService.addDoctor(doctor);
-
+    public ResponseEntity<DoctorRequestDTO> addDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO) {
+        DoctorRequestDTO savedDoctor = doctorService.addDoctor(doctorRequestDTO);
         logger.info("Log level: INFO");
         logger.debug("Log level: DEBUG");
         return ResponseEntity.ok(savedDoctor);

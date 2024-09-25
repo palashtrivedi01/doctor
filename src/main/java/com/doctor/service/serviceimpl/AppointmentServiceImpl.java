@@ -1,11 +1,11 @@
-package com.doctor.service;
+package com.doctor.service.serviceimpl;
 
 import com.doctor.dto.AppointmentRequestDto;
 import com.doctor.entities.Appointment;
 import com.doctor.exception.ControllerException;
 import com.doctor.repository.AppointmentRepository;
+import com.doctor.service.AppointmentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service

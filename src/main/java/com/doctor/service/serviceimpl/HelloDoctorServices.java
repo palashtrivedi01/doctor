@@ -1,4 +1,4 @@
-package com.doctor.service;
+package com.doctor.service.serviceimpl;
 
 import com.doctor.dto.DoctorRequestDTO;
 import com.doctor.dto.HospitalAddressDto;
@@ -10,6 +10,7 @@ import com.doctor.exception.ControllerException;
 import com.doctor.repository.AppointmentRepository;
 import com.doctor.repository.DoctorRepository;
 import com.doctor.repository.HospitalAddressRepository;
+import com.doctor.service.DoctorServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

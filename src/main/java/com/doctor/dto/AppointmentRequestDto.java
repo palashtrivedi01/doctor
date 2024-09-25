@@ -1,31 +1,41 @@
-/*package com.doctor.dto;
+package com.doctor.dto;
 
+import jakarta.persistence.Lob;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AppointmentRequestDto {
-    private int doctorId;
-    private Long appointment_id;
+//    private int doctorId;
+//    private Long appointmentId;
+//
+//    private String file;
 
-    private String file;
+    private String appointmentDate;
 
-    private LocalDate appointment_date;
+    private String doctorEmail;
 
-    private String doctor_email;
+    private String doctorName;
 
-    private String doctor_name;
+    private String patientEmail;
 
-    private String patient_email;
+    private Long patientMobileNumber;
 
-    private Long patient_mobile_number;
+    private String patientName;
 
-    private String patient_name;
+    private String time;
 
-    private LocalDate time;
+    private  String fileAttech;
 
-    private List<String> fileNames;
+    @Lob
+    private byte[] data;
+
+
+
 }
-*/

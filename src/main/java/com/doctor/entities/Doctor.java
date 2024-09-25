@@ -4,12 +4,16 @@ import com.doctor.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 public class Doctor {
@@ -20,13 +24,13 @@ public class Doctor {
     private Long doctorId;
     private Role role;
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String doctorEmail;
 
     private String doctorGender;
 
-    @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits")
-    @Column(unique = true)
+//    @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits")
+//    @Column(unique = true)
     private String doctorMobileNumber;
 
     private String doctorName;

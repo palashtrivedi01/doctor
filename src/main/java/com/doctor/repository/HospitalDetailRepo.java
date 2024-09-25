@@ -1,4 +1,13 @@
 package com.doctor.repository;
 
-public interface HospitalDetailRepo {
+import com.doctor.entities.HospitalDetails;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface HospitalDetailRepo extends JpaRepository<HospitalDetails, Long> {
+
+    List<HospitalDetails> findHospitalsByHospitalName(String hospitalName);
 }

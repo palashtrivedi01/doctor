@@ -1,4 +1,23 @@
-package com.doctor.dto;
+    package com.doctor.dto;
 
-public class UserDto {
-}
+    import com.doctor.Role;
+    import jakarta.persistence.Column;
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class UserDto {
+
+        @Column(unique = true)
+        private  String email;
+
+        @Column(unique = true)
+        private Long mobile;
+
+        private  String password;
+
+        private Role role;
+    }

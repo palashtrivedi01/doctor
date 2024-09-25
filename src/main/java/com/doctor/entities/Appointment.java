@@ -2,12 +2,16 @@ package com.doctor.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.sql.Blob;
 import java.time.LocalDate;
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Appointment {
     @Id
@@ -15,21 +19,23 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
 
-    private String file;
+    private String fileAttech;
 
-    private LocalDate appointmentDate;
+    private String appointmentDate;
 
     private String doctorEmail;
 
     private String doctorName;
-    @Column(unique = true)
+//    @Column(unique = true)
     private String patientEmail;
 
     private Long patientMobileNumber;
 
     private String patientName;
 
-    private LocalDate time;
+    private String time;
+    @Lob
+    private byte[] data;
 
     @ManyToOne
     @JsonIgnore

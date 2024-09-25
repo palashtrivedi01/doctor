@@ -2,95 +2,161 @@ package com.doctor.controller;
 
 //import com.doctor.dto.FileInfo;
 //import com.doctor.dto.ResponseMessage;
+import com.doctor.dto.AppointmentRequestDto;
 import com.doctor.entities.Appointment;
-import com.doctor.service.AppointmentServiceImpl;
+import com.doctor.fileuploading.EmptyInputException;
+import com.doctor.fileuploading.FileStorageService;
 import com.doctor.service.AppointmentServiceInterface;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.util.Optional;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/appointments")
 public class AppointmentController {
-    Logger logger
-            = LoggerFactory.getLogger(AppointmentController.class);
-
 
     @Autowired
     private AppointmentServiceInterface appointmentService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
 
+    @PostMapping(value = "/saveAppointment", consumes = "multipart/form-data")
+    public AppointmentRequestDto saveAppointment(@ModelAttribute AppointmentRequestDto appointmentRequestDto,
+                                                 @RequestPart("file") MultipartFile file) {
 
-//
-//    @PostMapping
-//    public ResponseEntity<String> createAppointment(
-//            @RequestParam("file") MultipartFile file,
-//            @RequestParam("patientId") Long patientId,
-//            @RequestParam("appointmentDate") String appointmentDate) {
-//
-//        if (file.isEmpty()) {
-//            return ResponseEntity.badRequest().body("File is empty");
-//        }
-//
-//        try {
-//            // Get the file name
-//            String fileName = file.getOriginalFilename();
-//
-//            // Get the file content as byte array
-//            byte[] fileContent = file.getBytes();
-//
-//            // Get the file size
-//            long fileSize = file.getSize();
-//
-//            // Get the file type
-//            String fileType = file.getContentType();
-//
-//            // TODO: Process the file (e.g., save to disk or database)
-//            // For example:
-//            // fileStorageService.saveFile(fileName, fileContent);
-//
-//             //TODO: Create and save the appointment
-//            // For example:
-//             Appointment appointment = new Appointment();
-//             appointment.setPatientId(patientId);
-//             appointment.setAppointmentDate(LocalDate.parse(appointmentDate));
-//             appointment.setFileName(fileName);
-//             appointmentRepository.save(appointment);
-//
-//            return ResponseEntity.ok("Appointment created successfully with file: " + fileName);
-//        } catch (IOException e) {
-//            return ResponseEntity.internalServerError().body("Failed to process file: " + e.getMessage());
-//        }
-//    }
+        String fileAttech = fileStorageService.storeFile(file);
 
-
-
-
-    @PostMapping("/createAppointment")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
-        Appointment appointment1 = appointmentService.createAppointment(appointment).getBody();
-        logger.info("Log level: INFO");
-        logger.debug("Log level: DEBUG");
-        return ResponseEntity.ok(appointment1);
+        if (ObjectUtils.isEmpty(fileAttech)) {
+            throw new EmptyInputException("file is empty");
+        }
+        appointmentRequestDto.setFileAttech(fileAttech);
+        return appointmentService.addAppointment(appointmentRequestDto);
     }
 
-    @GetMapping("/{patientEmail}")
-    public ResponseEntity<Appointment> getPatientByEmail(@PathVariable("patientEmail") String email) {
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity < Resource > downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException {
+        // Load file as Resource
+//        Resource resource = (Resource) fileStorageService.loadFileAsResource(fileName);
 
-        ResponseEntity<Appointment> appointment1 = this.appointmentService.findByPatientEmail(email);
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            log.info("Could not determine file type.");
+        }
 
-        logger.info("Log level: WARN");
-        logger.debug("Log level: ERROR");
-        return appointment1;
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
+
+//
+//    @PostMapping("/createAppointment")
+//    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
+//        Appointment appointment1 = appointmentService.createAppointment(appointment).getBody();
+//
+//        log.info("Data");
+//        return ResponseEntity.ok(appointment1);
+//    }
+
+//    @GetMapping("/{patientEmail}")
+//    public ResponseEntity<Appointment> getPatientByEmail(@PathVariable("patientEmail") String email) {
+//
+//        ResponseEntity<Appointment> appointment1 = this.appointmentService.findByPatientEmail(email);
+////
+////        logger.info("Log level: WARN");
+////        logger.debug("Log level: ERROR");
+//        return appointment1;
+//    }
+//}
+//
+
+//
+//    @GetMapping("/{patientEmail}")
+//    public ResponseEntity<AppointmentRequestDto> getPatientByEmail(@PathVariable("patientEmail") String email) throws FileNotFoundException {
+//        ResponseEntity<AppointmentRequestDto> fileEntity = appointmentService.findByPatientEmail(email);
+////       AppointmentRequestDto requestDto = fileEntity.getBody();
+//
+//        String file = fileEntity.getBody().getFileAttech();
+//
+//        InputStream resource=this.fileStorageService.downloadFile( "Downloads/");
+//
+//        StringUtils.copy(resource,response.getOutputStream());
+//
+//        return new ResponseEntity<AppointmentRequestDto>(fileEntity.getStatusCode());
+//    }
+//}
+
+//
+//    @GetMapping("/download")
+//    public ResponseEntity<Resource> downloadFile(@RequestParam String email) {
+//        ResponseEntity<AppointmentRequestDto> userOpt = appointmentService.findByPatientEmail(email);
+//
+//        if (userOpt.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//
+//        AppointmentRequestDto appointmentRequestDto = userOpt.get();
+//        File file = new File(appointmentRequestDto.getFilePath());
+//
+//        if (!file.exists()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//
+//        Resource resource = new FileSystemResource(file);
+//        String contentType;
+//        try {
+//            contentType = java.nio.file.Files.probeContentType(file.toPath());
+//        } catch (IOException e) {
+//            contentType = "application/octet-stream";
+//        }
+//
+//        return ResponseEntity.ok()
+//                .contentType(org.springframework.http.MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+//                .body(resource);
+//    }
+//}
+//
+//
+//
+//
+//
+//
+//
+
+
 
       /*  @PostMapping("/upload")
         public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {

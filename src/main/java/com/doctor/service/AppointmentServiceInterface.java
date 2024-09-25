@@ -1,21 +1,18 @@
 package com.doctor.service;
 
+import com.doctor.dto.AppointmentRequestDto;
 import com.doctor.entities.Appointment;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 public interface AppointmentServiceInterface {
 
-    public ResponseEntity<Appointment> createAppointment(Appointment appointment);
-
-    public ResponseEntity<Appointment> findByPatientEmail(String email);
+    //public ResponseEntity<Appointment> createAppointment(Appointment appointment);
 
 
+    AppointmentRequestDto addAppointment(AppointmentRequestDto appointmentRequestDto);
 
-
-
-
-   // Appointment store(MultipartFile file);
-  //  public void init();
-
-
+    AppointmentRequestDto findByPatientEmail(String email);
 }
+

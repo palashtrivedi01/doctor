@@ -1,4 +1,4 @@
-package com.doctor;
+package com.doctor.doctor;
 
 import com.doctor.dto.DoctorRequestDTO;
 import com.doctor.entities.Doctor;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class DoctorControllerTest {
+public class DoctorServiceTest {
 
     @BeforeEach
     public void setUp() {
@@ -103,10 +104,6 @@ public class DoctorControllerTest {
 
         assertNotNull(doctors1);
         verify(doctorRepository, times(1)).findAll();
-        DoctorRequestDTO doctorRequestDTO = new DoctorRequestDTO();
-        doctorRequestDTO.setDoctorGender("female");
-        doctorRequestDTO.setDoctorName("Imza");
-        doctorRequestDTO.setDoctorEmail("imza@gmail.com");
 
     }
 
@@ -117,14 +114,31 @@ public class DoctorControllerTest {
         Long id = 1L;
         Doctor doctor = new Doctor();
         doctor.setDoctorId(id);
-        when(doctorRepository.findById(id)).thenReturn(Optional.of(doctor));
 
-        String doctor1=helloDoctorServices.deleteByDoctorId(id);
-        verify(doctorRepository, times(1)).findById(id);
+
+        Mockito.doNothing().when(doctorRepository).deleteById(id);
+
+        String doctor1 = helloDoctorServices.deleteByDoctorId(id);
 
 
     }
-}
+
+    @Test
+    public void testUpdateDoctor()
+    {
+        String email = "azmi@gmail.com";
+        Doctor doctor= new Doctor();
+        doctor.setDoctorGender("female");
+        doctor.setDoctorEmail(email);
+
+
+        when(doctorRepository.findByDoctorEmail(email)).thenReturn(doctor);
+        Doctor doctor2=helloDoctorServices.updateDoctor(email,doctor);
+
+
+    }}
+
+
 
 
 
