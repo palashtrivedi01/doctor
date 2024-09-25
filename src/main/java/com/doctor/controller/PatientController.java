@@ -19,7 +19,7 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping("getAllPatients")
-    public ResponseEntity<List<Patient>> getAllPatients(@RequestBody Patient patient){
+    public ResponseEntity<List<Patient>> getAllPatients(){
         List<Patient> patients = patientService.getAllPatient();
         return new ResponseEntity<>(patients, HttpStatus.OK);
     }
@@ -28,5 +28,10 @@ public class PatientController {
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
         Patient savedPatient = patientService.addPatient(patient);
         return  new ResponseEntity<>(savedPatient,HttpStatus.OK);
+    }
+    @PutMapping("updatepatient")
+    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient){
+        Patient updatePatient = patientService.updatePatient(patient);
+        return new ResponseEntity<>(updatePatient,HttpStatus.OK);
     }
 }

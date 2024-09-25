@@ -9,26 +9,35 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class AppointmentRequestDto {
 
-    private String file;
+//    private String file;
+    private String fileAttech;
 
-    private Date appointmentDate;
+    private String appointmentDate;
 
-    @Email
+//    @Email
+//    @Pattern(regexp = ".+@.+\\..+", message = "Email should be in proper foramat")
     private String doctorEmail;
 
     private String doctorName;
 
-    @Email
+//    @Email
+//    @Pattern(regexp = ".+@.+\\..+",message = "Email should be in proper format.")
     private String patientEmail;
 
-    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
+//    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
     private Long patientMobileNo;
 
     private String patientName;
 
-    private LocalDateTime time;
+    private String time;
 
+//
+//    public void setFileAttech(String fileAttech) {
+//        this.fileAttech=fileAttech;
+//    }
 }

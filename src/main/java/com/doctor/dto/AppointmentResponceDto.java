@@ -1,5 +1,6 @@
 package com.doctor.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AppointmentResponceDto {
     @Id
     @NotBlank
@@ -25,21 +28,21 @@ public class AppointmentResponceDto {
 
     private String fileName;
 
-    private Date appointment_date;
+    private String appointmentDate;
 
-    @Email
-    private String doctor_email;
+//    @Email
+    private String doctorEmail;
 
-    private String doctor_name;
+//    @Column(nullable = false)
+    private String doctorEame;
 
-    @Email
-    private String patient_email;
+    private String patientEmail;
 
-    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
-    private Long patient_mobile_no;
+//    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
+    private Long patientMobileNo;
 
-    private String patient_name;
+    private String patientName;
 
-    private LocalDateTime time;
+    private String time;
 
 }

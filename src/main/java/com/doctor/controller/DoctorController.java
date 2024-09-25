@@ -6,6 +6,7 @@ import com.doctor.entities.Doctor;
 import com.doctor.exception.DoctorNotFoundException;
 import com.doctor.service.DoctorServices;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/doctor/")
+@Slf4j
 public class DoctorController {
     @Autowired
     private DoctorServices doctorServices;
@@ -26,10 +28,10 @@ public class DoctorController {
         return "Controller is working";
     }
 
-    Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
     @PostMapping("adddoctor")
-    public ResponseEntity<Doctor> addDoctor(@Valid  @RequestBody DoctorRequestDto doctorRequestDto) {
+    public ResponseEntity<Doctor> addDoctor(  @RequestBody DoctorRequestDto doctorRequestDto) {
+        log.info("addDoctor {}" , doctorRequestDto);
             Doctor savedDoctor = doctorServices.addDoctor(doctorRequestDto);
             return new ResponseEntity<>(savedDoctor, HttpStatus.CREATED);
 
@@ -54,16 +56,18 @@ public class DoctorController {
         return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
 
-    @GetMapping("/alldoctor")
+    @GetMapping("alldoctor")
     public ResponseEntity<List<Doctor>> getAllDoctors() {
+
         List<Doctor> doctors = doctorServices.getAllDoctors();
+//        System.out.println(doctors);
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
 
     @DeleteMapping("/deletedoctorById/{doctorId}")
     public ResponseEntity<String> deleteDoctorById(@Valid @PathVariable Long doctorId) throws DoctorNotFoundException {
         doctorServices.deleteDoctorById(doctorId);
-        return new ResponseEntity<>("Doctor deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Doctor deleted successfully", HttpStatus.ACCEPTED);
     }
 
     @GetMapping("getAppointment/{doctorEmail}")

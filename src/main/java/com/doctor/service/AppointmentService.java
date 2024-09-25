@@ -1,9 +1,10 @@
 package com.doctor.service;
+import com.doctor.dto.AppointmentRequestDto;
 import com.doctor.entities.Appointment;
 
 public interface AppointmentService {
 
-    public Appointment findByEmail(String patientEmail);
-    public Appointment saveAppointment(Appointment appointment);
+    Appointment findByEmail(String patientEmail);
+    AppointmentRequestDto saveAppointment(AppointmentRequestDto appointmentRequestDto);
 
 }

@@ -2,13 +2,7 @@ package com.doctor.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-
-import java.util.Date;
 
 @Data
 @Entity
@@ -21,11 +15,11 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
 
-    private String fileName;
+    private String fileAttech;
 
-    private Date appointmentDate;
+    private String appointmentDate;
 
-    @Email(message = "Enter valid mail")
+//    @Email(message = "Enter valid mail")
     private String doctorEmail;
 
     private String doctorName;
@@ -36,7 +30,7 @@ public class Appointment {
 
     private String patientName;
 
-    private LocalDateTime time;
+    private String time;
 
     @ManyToOne
     @JsonIgnore

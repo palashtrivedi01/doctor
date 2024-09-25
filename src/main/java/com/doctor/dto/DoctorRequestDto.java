@@ -9,23 +9,24 @@ import lombok.*;
 import java.util.Date;
 
 @Data
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DoctorRequestDto {
+    private Long doctorId;
 
 
-    @NotBlank(message = "Email is mandatory")
-//    @Email
+//    @NotBlank(message = "Email is mandatory")
+//    @Pattern(regexp = ".+@.+\\..+", message = "Email should be in proper foramat")
     private String doctorEmail;
 
-    @NotBlank
+//    @NotBlank
     private String doctorGender;
 
-    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
+//    @Pattern(regexp = "^[0-9]{10}$",message = "Mobile number should be valid with 10 digits")
     private String doctorMobileNumber;
 
-    @NotBlank(message = "Invalid name : Empty name")
-    @NotNull(message = "Invalid name : Name is null")
+//    @NotBlank(message = "Invalid name : Empty name")
+//    @NotNull(message = "Invalid name : Name is null")
     private String doctorName;
 
     private String doctorPassword;

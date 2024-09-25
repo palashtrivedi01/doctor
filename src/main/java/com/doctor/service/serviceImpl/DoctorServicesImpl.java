@@ -1,16 +1,19 @@
 package com.doctor.service.serviceImpl;
 
 import com.doctor.dto.DoctorRequestDto;
+import com.doctor.dto.HospitalAddressDto;
 import com.doctor.entities.Appointment;
 import com.doctor.entities.Doctor;
+import com.doctor.entities.HospitalAddress;
 import com.doctor.exception.BusinessException;
 import com.doctor.exception.ControllerException;
 import com.doctor.exception.DoctorNotFoundException;
 import com.doctor.repository.AppointmentRepository;
 import com.doctor.repository.DoctorRepository;
+
+import com.doctor.repository.HospitalAddressRepository;
 import com.doctor.service.DoctorServices;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +30,32 @@ public class DoctorServicesImpl implements DoctorServices {
 
     @Autowired
     private DoctorRepository doctorRepository;
-    @Autowired
-    private AppointmentRepository appointmentRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private HospitalAddressRepository hospitalAddressRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+//
+//    @Autowired
+//    private ModelMapper modelMapper;
 
     @Override
     public Doctor addDoctor(DoctorRequestDto doctorRequestDto) {
-        System.out.println(doctorRequestDto.getDoctorEmail()+"sdddddddddddddddddddddddd");
-        if (doctorRequestDto.getDoctorEmail().equals("abc")){
-            log.info("ERRRRRRRRORRRRRRRRRRRoorrrrr");
-            throw new ControllerException("Doctor email cannot be null");
-        }
-        System.out.println(doctorRequestDto);
-        Doctor doctor = modelMapper.map(doctorRequestDto,Doctor.class);
+       Doctor doctor = new Doctor();
+       doctor.setDoctorGender(doctorRequestDto.getDoctorGender());
+       doctor.setDoctorEmail(doctorRequestDto.getDoctorEmail());
+       doctor.setDoctorName(doctorRequestDto.getDoctorName());
+       doctor.setDoctorPassword(doctorRequestDto.getDoctorPassword());
+       doctor.setDoctorSpecialization(doctorRequestDto.getDoctorSpecialization());
+       doctor.setDoctorName(doctorRequestDto.getDoctorName());
+       doctor.setDoctorMobileNumber(doctorRequestDto.getDoctorMobileNumber());
+
         doctorRepository.save(doctor);
         return doctor;
 
     }
+
 
     @Override
     public Doctor updateDoctor(String doctorEmail, DoctorRequestDto doctorRequestDto) throws DoctorNotFoundException {
@@ -56,7 +66,6 @@ public class DoctorServicesImpl implements DoctorServices {
         log.info("All the updated data of the doctor{}", optionalDoctor);
         if (optionalDoctor.isPresent()){
             Doctor doctor = optionalDoctor.get();
-            modelMapper.map(doctorRequestDto,doctor);
             return doctorRepository.save(doctor);
         }else
             throw new DoctorNotFoundException("Doctor not found with email :"+ doctorEmail);
@@ -64,10 +73,10 @@ public class DoctorServicesImpl implements DoctorServices {
 
     @Override
     public Optional<Doctor> getDoctorById(long doctorId) {
-        if (doctorId<=0){
+        if (doctorId <= 0) {
             throw new ControllerException("Invalid id");
         }
-        return  this.doctorRepository.findById(doctorId);
+        return this.doctorRepository.findById(doctorId);
     }
 
 
@@ -100,7 +109,16 @@ public class DoctorServicesImpl implements DoctorServices {
         return appointmentRepository.findByDoctorEmail((doctorEmail));
     }
 
+    @Override
+    public HospitalAddressDto getHospitalAddressById(Long addressId) {
+        HospitalAddress address = hospitalAddressRepository.findById(addressId).orElseThrow(() -> new BusinessException("Invalid Input"));
+        HospitalAddressDto hospitalAddressDto= new HospitalAddressDto();
+        hospitalAddressDto.setAddressName(hospitalAddressDto.getAddressName());
+        hospitalAddressDto.setCity(hospitalAddressDto.getCity());
+        hospitalAddressDto.setState(hospitalAddressDto.getAddressName());
+        hospitalAddressDto.setZipCode(hospitalAddressDto.getZipCode());
+        return hospitalAddressDto;
+    }
+
 
 }
-
-

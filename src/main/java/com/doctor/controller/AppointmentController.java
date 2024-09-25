@@ -1,71 +1,86 @@
 package com.doctor.controller;
 import com.doctor.dto.AppointmentRequestDto;
-import com.doctor.dto.AppointmentResponceDto;
+import com.doctor.dto.Response;
 import com.doctor.entities.Appointment;
+import com.doctor.exception.EmptyInputException;
 import com.doctor.service.AppointmentService;
+import com.doctor.service.FileStorageService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Logger;
+
 
 @RestController
 @RequestMapping("/appointment")
+@Slf4j
 public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
 
-    @PostMapping("/saveAppointment")
-    public ResponseEntity<Appointment> saveAppointment(@Valid  @RequestBody Appointment appointment) {
-        Appointment appointment1 = this.appointmentService.saveAppointment(appointment);
-        return ResponseEntity.ok(appointment1);
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @PostMapping(value = "/saveAppointment",consumes = "multipart/form-data")
+    public AppointmentRequestDto saveAppointment(@ModelAttribute AppointmentRequestDto appointmentRequestDto,
+                                                 @RequestPart("file") MultipartFile file) {
+        String fileAttech = fileStorageService.storeFile(file);
+
+        if (ObjectUtils.isEmpty(fileAttech)) {
+            throw new EmptyInputException("file is empty");
+        }
+        appointmentRequestDto.setFileAttech(fileAttech);
+        return appointmentService.saveAppointment(appointmentRequestDto);
     }
 
     @GetMapping("/getAppointment/{patientEmail}")
     public ResponseEntity<Appointment> getAppointment(@Valid @PathVariable String patientEmail) {
+        log.info("Dummy data ");
+        log.trace("tracce");
         Appointment byEmail = this.appointmentService.findByEmail(patientEmail);
         return ResponseEntity.ok(byEmail);
     }
 
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity < Resource > downloadFile(@PathVariable String fileName, HttpServletRequest request) throws MalformedURLException {
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            log.info("Could not determine file type.");
+        }
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+
+
 
 }
 
-//
-//@PostMapping("/save")
-//public ResponseEntity<String> saveAppoinment(
-//        @RequestPart("appoinment") AppointmentRequestDto appointmentRequestDto,
-//        @RequestPart("file") MultipartFile file) throws IOException {
-//    AppointmentResponceDto savedAppointment = appointmentService.saveAppoinment(appointmentRequestDto, file);
-//        return  new ResponseEntity<>(savedAppointment, HttpStatus.CREATED);
-//
-//}
-//}
-//
-//
-//@Override
-//public AppointmentResponceDto saveAppoinment(AppointmentRequestDto appointmentRequestDto, MultipartFile file) throws IOException {
-//    String fileName = null;
-//    if(file!= null && !file.isEmpty()){
-//        fileName=saveFile(file);
-//        appointmentRequestDto.setFile(file);
-//    }
-//    Appointment appointment = modelMapper.map(appointmentRequestDto,Appointment.class);
-//
-//    Appointment saveedAppoinment = appointmentRepository.save(appointment);
-//
-//    AppointmentResponceDto responceDto= modelMapper.map(saveedAppoinment,AppointmentResponceDto.class);
-//
-//    return responceDto;
-//}
-//private String saveFile (MultipartFile file) throws IOException{
-//    String originalFileName = file.getOriginalFilename();
-//    String uniqueFileName = System.currentTimeMillis() + " " + originalFileName;
-//    Path filePath = Paths.get(uploadDirectory,uniqueFileName);
-//    Files.createDirectories((filePath.getParent()));
-//    Files.write(filePath,file.getBytes());
-//    return  uniqueFileName;
-//}
-//}
 
 
-
+//
+//@PostMapping("/saveAppointment")
+//public ResponseEntity<AppointmentRequestDto> saveAppointment(@Valid  @RequestBody AppointmentRequestDto appointmentRequestDto) {
+//    AppointmentRequestDto appointmentRequestDto1 = this.appointmentService.saveAppointment(appointmentRequestDto);
+//    return ResponseEntity.ok(appointmentRequestDto1);
+//}
