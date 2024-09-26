@@ -93,6 +93,7 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doctor = doctorRepo.findById(doctorId).isPresent() ? doctorRepo.findById(doctorId).get() : null;
         if (doctor != null) {
             DoctorRequestDto doctorRequestDto = new DoctorRequestDto();
+            doctorRequestDto.setDoctorId(doctorId);
             doctorRequestDto.setDoctorName(doctor.getDoctorName());
             doctorRequestDto.setDoctorGender(doctor.getDoctorGender());
             doctorRequestDto.setDoctorMobileNumber(doctor.getDoctorMobileNumber());
@@ -118,6 +119,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
         return allDoctors.stream().map(doctor -> {
             DoctorRequestDto doctorRequestDto = new DoctorRequestDto();
+            doctorRequestDto.setDoctorId(doctor.getDoctorId());
             doctorRequestDto.setDoctorName(doctor.getDoctorName());
             doctorRequestDto.setDoctorGender(doctor.getDoctorGender());
             doctorRequestDto.setDoctorMobileNumber(doctor.getDoctorMobileNumber());
