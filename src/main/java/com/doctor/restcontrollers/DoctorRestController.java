@@ -26,9 +26,14 @@ public class DoctorRestController {
     @Autowired
     private IAppointmentService iAppointmentService;
 
+//    @GetMapping("/")
+//    public ResponseEntity<String> home(){
+//        return new ResponseEntity<>("CONTROLLER IS WORKING", HttpStatus.ACCEPTED);
+//    }
+
     @GetMapping("/")
-    public ResponseEntity<String> home(){
-        return new ResponseEntity<>("CONTROLLER IS WORKING", HttpStatus.ACCEPTED);
+    public String home(){
+        return "CONTROLLER IS WORKING";
     }
 
     @PostMapping("/addDoctor")

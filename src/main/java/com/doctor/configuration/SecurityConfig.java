@@ -56,7 +56,7 @@ public class SecurityConfig {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/api/v3/hms/user/saveUser").permitAll()
+                .requestMatchers("/auth/**", "/api/v3/hms/user/saveUser", "/api/v3/hms/hospitalAddress/getAllHospitalAddresses").permitAll()
 //                .requestMatchers("/doctor/**").hasAuthority("ROLE_ADMIN")
 //                .requestMatchers("/doctor/**").hasRole("ADMIN")
 //                .requestMatchers(HttpMethod.OPTIONS).permitAll()

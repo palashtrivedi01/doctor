@@ -62,7 +62,6 @@ public class HospitalAddressRestControllerTest {
     @Mock
     IHospitalAddressService iHospitalAddressService;
 
-    @Autowired
     MockMvc mockMvc;
 
     ObjectMapper objectMapper = new ObjectMapper();

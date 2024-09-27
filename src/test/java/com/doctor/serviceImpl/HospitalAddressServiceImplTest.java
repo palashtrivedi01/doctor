@@ -3,6 +3,7 @@ package com.doctor.serviceImpl;
 import com.doctor.ENUM.Country;
 import com.doctor.entities.HospitalAddress;
 import com.doctor.exception.BusinessException;
+import com.doctor.exception.ControllerException;
 import com.doctor.repositories.IHospitalRepository;
 import com.doctor.requestDto.HospitalAddressRequestDto;
 import com.doctor.services.IHospitalAddressService;
@@ -32,8 +33,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,15 +47,13 @@ public class HospitalAddressServiceImplTest {
     @Mock
     private IHospitalRepository hospitalRepository;
 
-
-    @Autowired
     private ModelMapper modelMapper;
 
 //    @Mock
 //    HospitalAddress hospitalAddress;
 
     @BeforeEach
-     void setup(){
+    void setup(){
         MockitoAnnotations.openMocks(this);
 //        hospitalAddressService = new HospitalAddressServiceImpl();
     }
@@ -63,7 +61,7 @@ public class HospitalAddressServiceImplTest {
     @DisplayName("Save hospital address...")
     @Test
     void saveHospitalAddress_Success() {
-                HospitalAddressRequestDto savedDto = HospitalAddressRequestDto.builder()
+        HospitalAddressRequestDto savedDto = HospitalAddressRequestDto.builder()
                 .addressName("address")
                 .city("city")
                 .state("state")
@@ -73,13 +71,13 @@ public class HospitalAddressServiceImplTest {
 
 //        when(hospitalAddressService.saveHospitalAddress(any(HospitalAddressRequestDto.class))).thenReturn(savedDto);
 
-               HospitalAddress hospitalAddress = HospitalAddress.builder()
-                        .addressName("address")
-                        .city("city")
-                        .state("state")
-                        .zipCode("123456")
-                        .country(Country.INDIA)
-                        .build();
+        HospitalAddress hospitalAddress = HospitalAddress.builder()
+                .addressName("address")
+                .city("city")
+                .state("state")
+                .zipCode("123456")
+                .country(Country.INDIA)
+                .build();
 
         when(hospitalRepository.save(any(HospitalAddress.class))).thenReturn(hospitalAddress);
 
@@ -94,7 +92,7 @@ public class HospitalAddressServiceImplTest {
         assertEquals("123456", result.getZipCode());
         assertEquals("INDIA", result.getCountry());
 
-       // verify(hospitalAddressService, times(1)).saveHospitalAddress(any(HospitalAddressRequestDto.class));
+        // verify(hospitalAddressService, times(1)).saveHospitalAddress(any(HospitalAddressRequestDto.class));
     }
 
     @Test
@@ -132,9 +130,9 @@ public class HospitalAddressServiceImplTest {
 
     @Test
     void deleteHospitalAddressByHospitalId_Success() throws BusinessException {
-       Long hospitalAddressId = 1L;
+        Long hospitalAddressId = 1L;
 
-       HospitalAddress hospitalAddress = HospitalAddress.builder()
+        HospitalAddress hospitalAddress = HospitalAddress.builder()
 //                .hospitalAddressId(1L)
                 .addressName("Navlakha")
                 .zipCode("452001")
@@ -143,8 +141,8 @@ public class HospitalAddressServiceImplTest {
                 .city("Indore")
                 .build();
 
-       when(hospitalRepository.findById(hospitalAddressId)).thenReturn(Optional.ofNullable(hospitalAddress));
-       hospitalAddressService.deleteHospitalAddressByHospitalId(hospitalAddressId);
+        when(hospitalRepository.findById(hospitalAddressId)).thenReturn(Optional.ofNullable(hospitalAddress));
+        hospitalAddressService.deleteHospitalAddressByHospitalId(hospitalAddressId);
     }
 
 
@@ -192,14 +190,14 @@ public class HospitalAddressServiceImplTest {
 
         when(hospitalRepository.findAll()).thenReturn(hospitalAddressList);
         List<HospitalAddressRequestDto> hospitalAddressRequestDtoList =
-        hospitalAddressList.stream().map( hospitalAddressRequestDto -> {
-            HospitalAddressRequestDto dto = new HospitalAddressRequestDto();
-            dto.setAddressName(hospitalAddressRequestDto.getAddressName());
-            dto.setCountry(String.valueOf(hospitalAddressRequestDto.getCountry()));
-            dto.setCity(hospitalAddressRequestDto.getCity());
-            dto.setState(hospitalAddressRequestDto.getState());
-            dto.setZipCode(hospitalAddressRequestDto.getZipCode());
-            return dto;
+                hospitalAddressList.stream().map( hospitalAddressRequestDto -> {
+                    HospitalAddressRequestDto dto = new HospitalAddressRequestDto();
+                    dto.setAddressName(hospitalAddressRequestDto.getAddressName());
+                    dto.setCountry(String.valueOf(hospitalAddressRequestDto.getCountry()));
+                    dto.setCity(hospitalAddressRequestDto.getCity());
+                    dto.setState(hospitalAddressRequestDto.getState());
+                    dto.setZipCode(hospitalAddressRequestDto.getZipCode());
+                    return dto;
                 }).toList();
 
 
@@ -212,34 +210,34 @@ public class HospitalAddressServiceImplTest {
 
     @Test
     void getAllHospitalAddressesByCity() throws BusinessException {
-            String city = "Moscow";
-            List<HospitalAddress> hospitalAddressList = new ArrayList<>();
-            hospitalAddressList.add(HospitalAddress.builder().city("Bengaluru").addressName("Cubbon park").country(Country.INDIA).state("Karnataka").zipCode("464001").build());
-            hospitalAddressList.add(HospitalAddress.builder().city("Moscow").addressName("Russia street").country(Country.RUSSIA).state("Moscow state").zipCode("464001").build());
-            hospitalAddressList.add(HospitalAddress.builder().city("Ukraine city").addressName("Ukraine street").country(Country.UKRAINE).state("Kyiv").zipCode("246800").build());
-            hospitalAddressList.add(HospitalAddress.builder().city("dutch city").addressName("Dutch street").country(Country.NETHERLANDS).state("Dutch state").zipCode("135790").build());
-            hospitalAddressList.add(HospitalAddress.builder().city("Moscow").addressName("Great Barrier").country(Country.RUSSIA).state("New russia").zipCode("452002").build());
+        String city = "Moscow";
+        List<HospitalAddress> hospitalAddressList = new ArrayList<>();
+        hospitalAddressList.add(HospitalAddress.builder().city("Bengaluru").addressName("Cubbon park").country(Country.INDIA).state("Karnataka").zipCode("464001").build());
+        hospitalAddressList.add(HospitalAddress.builder().city("Moscow").addressName("Russia street").country(Country.RUSSIA).state("Moscow state").zipCode("464001").build());
+        hospitalAddressList.add(HospitalAddress.builder().city("Ukraine city").addressName("Ukraine street").country(Country.UKRAINE).state("Kyiv").zipCode("246800").build());
+        hospitalAddressList.add(HospitalAddress.builder().city("dutch city").addressName("Dutch street").country(Country.NETHERLANDS).state("Dutch state").zipCode("135790").build());
+        hospitalAddressList.add(HospitalAddress.builder().city("Moscow").addressName("Great Barrier").country(Country.RUSSIA).state("New russia").zipCode("452002").build());
 
-            when(hospitalRepository.findHospitalAddressByCity(city)).thenReturn(
-                    hospitalAddressList.stream().filter(hospitalAddress -> hospitalAddress.getCity().equals(city)).collect(Collectors.toList())
-            );
+        when(hospitalRepository.findHospitalAddressByCity(city)).thenReturn(
+                hospitalAddressList.stream().filter(hospitalAddress -> hospitalAddress.getCity().equals(city)).collect(Collectors.toList())
+        );
 
-            List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream()
-                    .filter(hospitalAddress -> hospitalAddress.getCity().equals(city))
-                    .map(hospitalAddress -> {
-                       HospitalAddressRequestDto dto = new HospitalAddressRequestDto();
-                        dto.setAddressName(hospitalAddress.getAddressName());
-                        dto.setCountry(String.valueOf(hospitalAddress.getCountry()));
-                        dto.setCity(hospitalAddress.getCity());
-                        dto.setState(hospitalAddress.getState());
-                        dto.setZipCode(hospitalAddress.getZipCode());
-                        return dto;
-                    }).toList();
+        List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream()
+                .filter(hospitalAddress -> hospitalAddress.getCity().equals(city))
+                .map(hospitalAddress -> {
+                    HospitalAddressRequestDto dto = new HospitalAddressRequestDto();
+                    dto.setAddressName(hospitalAddress.getAddressName());
+                    dto.setCountry(String.valueOf(hospitalAddress.getCountry()));
+                    dto.setCity(hospitalAddress.getCity());
+                    dto.setState(hospitalAddress.getState());
+                    dto.setZipCode(hospitalAddress.getZipCode());
+                    return dto;
+                }).toList();
 
-            hospitalAddressService.getAllHospitalAddressesByCity(city);
+        hospitalAddressService.getAllHospitalAddressesByCity(city);
 
-            assertEquals(2, hospitalAddressRequestDtoList.size());
-            assertEquals("RUSSIA", hospitalAddressRequestDtoList.get(0).getCountry());
+        assertEquals(2, hospitalAddressRequestDtoList.size());
+        assertEquals("RUSSIA", hospitalAddressRequestDtoList.get(0).getCountry());
 
         System.out.println("Test passed: " + hospitalAddressRequestDtoList.stream().map(dto -> dto.getCity() + "(" + dto.getState() + ", " + dto.getCountry() + ")").collect(Collectors.joining(", ")));
     }
@@ -256,7 +254,7 @@ public class HospitalAddressServiceImplTest {
         hospitalAddressList.add(HospitalAddress.builder().city("Moscow").addressName("Great Barrier").country(Country.RUSSIA).state("New russia").zipCode("452002").build());
 
         when(hospitalRepository.findHospitalAddressByState(state)).thenReturn(
-          hospitalAddressList.stream().filter(hospitalAddress -> hospitalAddress.getState().equals(state)).collect(Collectors.toList())
+                hospitalAddressList.stream().filter(hospitalAddress -> hospitalAddress.getState().equals(state)).collect(Collectors.toList())
         );
 
         List<HospitalAddressRequestDto> hospitalAddressRequestDtoList = hospitalAddressList.stream()
@@ -280,5 +278,121 @@ public class HospitalAddressServiceImplTest {
 
     }
 
+//    *******************************************************************
+
+    @DisplayName("Invalid zip code...")
+    @Test
+    void testSaveHospitalAddress_InvalidZipCode() {
+        HospitalAddressRequestDto requestDto = HospitalAddressRequestDto.builder()
+                .state("Goa")
+                .country("India")
+                .city("Panji")
+                .addressName("Saint Sebastian garden")
+                .zipCode("123")
+                .build();
+
+        Exception exception = assertThrows(ControllerException.class,
+                () -> hospitalAddressService.saveHospitalAddress(requestDto));
+
+        assertEquals("Zipcode must contain exactly 6 digits", exception.getMessage());
+    }
+
+    @Test
+    void testSaveHospitalAddress_CountryNotFound() {
+        HospitalAddressRequestDto hospitalAddressRequestDto = HospitalAddressRequestDto.builder()
+                .zipCode("464001")
+                .addressName("Manit hall")
+                .country("Null")
+                .city("Bengaluru")
+                .state("Karnataka")
+                .build();
+
+        Exception exception = assertThrows(ControllerException.class,
+                () -> hospitalAddressService.saveHospitalAddress(hospitalAddressRequestDto));
+
+        assertEquals("Country not found", exception.getMessage());
+    }
+
+    @Test
+    void updateHospitalByHospitalId_HospitalIdNotFound() {
+        Long hospitalId = 111L;
+
+        HospitalAddressRequestDto hospitalAddressRequestDto = HospitalAddressRequestDto.builder()
+                .zipCode("464001")
+                .addressName("Manit hall")
+                .country("Null")
+                .city("Bengaluru")
+                .state("Karnataka")
+                .build();
+
+        when(hospitalRepository.findById(hospitalId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(BusinessException.class,
+                () -> hospitalAddressService.updateHospitalByHospitalId(hospitalId, hospitalAddressRequestDto)
+        );
+
+        assertEquals("Hospital Address Not Found with given Id : " + hospitalId, exception.getMessage());
+    }
+
+    @Test
+    void testDeleteHospitalAddressByHospitalId_NotFound()  {
+        Long hospitalId = 2L;
+
+        HospitalAddressRequestDto hospitalAddressRequestDto = HospitalAddressRequestDto.builder()
+                .zipCode("464001")
+                .addressName("Manit hall")
+                .country("Null")
+                .city("Bengaluru")
+                .state("Karnataka")
+                .build();
+
+        when(hospitalRepository.findById(hospitalId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(BusinessException.class, () ->
+                hospitalAddressService.deleteHospitalAddressByHospitalId(hospitalId));
+
+        assertEquals("Hospital Address Not Found with given Id : " + hospitalId, exception.getMessage());
+    }
+
+    @Test
+    void testGetHospitalAddressById_NotFound() {
+        Long hospitalId = 1432L;
+
+        when(hospitalRepository.findById(hospitalId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(BusinessException.class, () -> {
+            hospitalAddressService.getHospitalAddressById(hospitalId);
+        });
+
+        assertEquals("Hospital Address Not Found with given Id : " + hospitalId, exception.getMessage());
+    }
+
+    @Test
+    void testGetAllHospitalAddressesByCity_InvalidCity() {
+
+        String city = "123";
+        Exception exception = assertThrows(BusinessException.class, () -> hospitalAddressService.getAllHospitalAddressesByCity(city));
+        assertEquals("Number cannot be passed as City", exception.getMessage());
+
+    }
+
+    @Test
+    void testGetAllHospitalAddressesByState_InvalidState() {
+        String state = "123";
+
+        Exception exception = assertThrows(BusinessException.class,
+                () -> hospitalAddressService.getAllHospitalAddressesByState(state));
+
+        assertEquals("Number cannot be passed as State", exception.getMessage());
+
+    }
+
+    @Test
+    void testGetAllHospitalAddressesByCountry_InvalidCountry() {
+        String country = "123456";
+        Exception exception = assertThrows(BusinessException.class,
+                () -> hospitalAddressService.getAllHospitalAddressesByCountry(country));
+        assertEquals("Number cannot be passed as Country", exception.getMessage());
+    }
 
 }

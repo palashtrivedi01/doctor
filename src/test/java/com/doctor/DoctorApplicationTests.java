@@ -12,7 +12,7 @@ class DoctorApplicationTests {
 	void contextLoads() {
 		System.out.println("Test");
 		assertTrue(true);
-				
+
 	}
 
 }

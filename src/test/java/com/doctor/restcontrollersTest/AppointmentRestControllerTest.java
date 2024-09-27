@@ -41,7 +41,6 @@ public class AppointmentRestControllerTest {
     @InjectMocks
     private AppointmentRestController appointmentRestController;
 
-    @Autowired
     MockMvc mockMvc;
 
     @BeforeEach
